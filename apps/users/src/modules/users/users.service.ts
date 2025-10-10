@@ -2,9 +2,14 @@ import { Injectable } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UserDTO } from "./dto/user.dto";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { User, UserDocument } from "./entities/user.entity";
 
 @Injectable()
 export class UsersService {
+  constructor(@InjectModel(User.name) userModel: Model<UserDocument>) {}
+
   private users: UserDTO[] = [{
     id: 1,
     email: "MockData@gmail.com",
