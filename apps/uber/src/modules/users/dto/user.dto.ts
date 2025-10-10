@@ -7,9 +7,9 @@ import {
 } from "class-validator";
 
 export class UserDTO {
-    @IsInt({ message: "O campo deve ser um número Inteiro." })
+    @IsString({ message: "O campo deve ser um número Inteiro." })
     @IsNotEmpty({ message: "O campo senha é obrigatório." })
-    id: number;
+    id: string;
 
     @IsEmail({}, { message: "O e-mail informado é inválido." })
     @IsNotEmpty({ message: "O campo e-mail é obrigatório." })

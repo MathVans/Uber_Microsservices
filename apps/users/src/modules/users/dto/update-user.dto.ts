@@ -1,8 +1,9 @@
 import { PartialType } from "@nestjs/mapped-types";
 import { CreateUserDto } from "./create-user.dto";
-import { IsNumber } from "class-validator";
+import { IsMongoId, IsNumber } from "class-validator";
+import { Types } from "mongoose";
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
-  @IsNumber()
-  id: number;
+  @IsMongoId({})
+  id: Types.ObjectId;
 }
