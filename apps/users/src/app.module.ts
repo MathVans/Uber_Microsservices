@@ -7,14 +7,15 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { AuthController } from "./modules/auth/auth.controller";
 import { mongoConfig } from "./shared/infra/database/database";
 import { AuthService } from "./modules/auth/auth.service";
+import { User, UserSchema } from "./modules/users/entities/user.entity";
 
 @Module({
   imports: [
     MongooseModule.forRootAsync(mongoConfig),
-    UsersModule,
     AuthModule,
+    UsersModule,
   ],
-  controllers: [AuthController, UsersController],
-  providers: [UsersService, AuthService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

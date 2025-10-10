@@ -1,1 +1,16 @@
-export class CreateUserDto {}
+import { IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
+
+export class CreateUserDto {
+    @IsString()
+    @IsNotEmpty()
+    name: string;
+
+    @IsEmail()
+    @IsNotEmpty()
+    email: string;
+
+    @IsString()
+    @MinLength(8, { message: "A senha deve conter no mínimo 8 caracteres" })
+    @IsNotEmpty()
+    password: string;
+}
