@@ -2,17 +2,17 @@ import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { AuthController } from "./auth/auth.controller";
-import { AuthModule } from "./auth/auth.module";
-import { UsersModule } from "./users/users.module";
-import { UsersController } from "./users/users.controller";
-import { UsersService } from "./users/users.service";
+import { UsersModule } from "./modules/users/users.module";
+import { UsersController } from "./modules/users/users.controller";
+import { UsersService } from "./modules/users/users.service";
 import { MongooseModule } from "@nestjs/mongoose";
+import { AuthModule } from "./modules/auth/auth.module";
+import { AuthController } from "./modules/auth/auth.controller";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ".env",
+      envFilePath: ".env.users",
       isGlobal: true,
     }),
     MongooseModule.forRootAsync({
