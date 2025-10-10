@@ -7,8 +7,8 @@ import { ClientProxy } from "@nestjs/microservices";
 export class UsersService {
   constructor(@Inject("USERS_CLIENT") private userClient: ClientProxy) {
   }
-  create(data: any) {
-    return this.userClient.send("users.Create", data);
+  create(data: CreateUserDto) {
+    return this.userClient.send("users.create", data);
   }
 
   findAll() {

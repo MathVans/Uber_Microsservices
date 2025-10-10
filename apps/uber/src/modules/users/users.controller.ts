@@ -16,7 +16,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() data: any) {
+  create(@Body() data: CreateUserDto) {
     return this.usersService.create(data);
   }
 
