@@ -1,10 +1,9 @@
 import { Controller } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { MessagePattern, Payload } from "@nestjs/microservices";
-import { RegisterDto } from "./dto/register.dto";
-import { LoginDto } from "./dto/login.dto";
-import { User } from "../users/entities/user.entity";
-import { JwtToken } from "../../shared/common/interfaces/jwt-token.interface";
+import { RegisterDto } from "@app/common/modules/auth/dto/register.dto";
+import { LoginDto } from "@app/common/modules/auth/dto/login.dto";
+import { JwtToken } from "@app/common/shared/interfaces/jwt-token.interface";
 
 @Controller()
 export class AuthController {
