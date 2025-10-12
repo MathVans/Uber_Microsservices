@@ -1,5 +1,7 @@
+import { Role } from "@app/common/shared/enum/role.enum";
 import {
     IsEmail,
+    IsEnum,
     IsNotEmpty,
     IsString,
     IsStrongPassword,
@@ -20,4 +22,7 @@ export class CreateUserDto {
         minLength: 6,
     })
     password: string;
+
+    @IsEnum(Role)
+    role: Role;
 }

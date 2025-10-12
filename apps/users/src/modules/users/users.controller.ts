@@ -1,4 +1,4 @@
-import { Controller } from "@nestjs/common";
+import { BadRequestException, Controller } from "@nestjs/common";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import { UsersService } from "./users.service";
 import { UpdateUserDto } from "@app/common/modules/user/dto/update-user.dto";
@@ -15,6 +15,10 @@ export class UsersController {
 
   @MessagePattern("users.update")
   update(@Payload() updateUserDto: UpdateUserDto): Promise<User> {
-    return this.usersService.update(updateUserDto);
+    try {
+      return this.usersService.update(updateUserDto);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 }

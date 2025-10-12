@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, Query } from "@nestjs/common";
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Query,
+} from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { IdDto } from "../../shared/common/dto/Id-dto";
@@ -13,10 +21,10 @@ export class UsersController {
   }
 
   @Patch("/me")
-  update(
+  async update(
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.usersService.update(updateUserDto);
+    return await this.usersService.update(updateUserDto);
   }
 
   @Get("/:id")
