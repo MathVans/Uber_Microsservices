@@ -1,6 +1,8 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types, UuidSchemaDefinition } from "mongoose";
 import * as bcrypt from "bcrypt";
+import { JwtToken } from "apps/users/src/shared/common/interfaces/jwt-token.interface";
+import { Role } from "apps/users/src/shared/common/enum/role.enum";
 
 export type UserDocument = User & Document;
 
@@ -19,7 +21,14 @@ export class User {
     @Prop({ required: true })
     email: string;
 
-    @Prop({ required: true })
+    @Prop({
+        required: true,
+        type: String,
+        enum: Object.values(Role),
+    })
+    role: Role;
+
+    @Prop({ required: true, select: false })
     password: string;
 }
 

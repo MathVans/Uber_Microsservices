@@ -1,15 +1,18 @@
 import {
     IsEmail,
     IsInt,
+    IsMongoId,
     IsNotEmpty,
+    IsOptional,
     IsString,
     MinLength,
 } from "class-validator";
+import { Types } from "mongoose";
 
 export class UserDTO {
-    @IsString({ message: "O campo deve ser um número Inteiro." })
-    @IsNotEmpty({ message: "O campo senha é obrigatório." })
-    id: string;
+    @IsMongoId({ message: "O ID deve ser um ObjectId válido do MongoDB." })
+    @IsOptional() // O ID é opcional pois será gerado automaticamente
+    id?: Types.ObjectId;
 
     @IsEmail({}, { message: "O e-mail informado é inválido." })
     @IsNotEmpty({ message: "O campo e-mail é obrigatório." })
