@@ -16,6 +16,6 @@ export class AuthController {
 
   @MessagePattern("auth.login")
   async login(@Payload() loginDto: LoginDto) {
-    return "Login ";
+    return this.authService.login(loginDto);
   }
 }
