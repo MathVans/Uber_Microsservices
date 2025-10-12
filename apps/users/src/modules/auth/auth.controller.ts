@@ -3,6 +3,8 @@ import { AuthService } from "./auth.service";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import { RegisterDto } from "./dto/register.dto";
 import { LoginDto } from "./dto/login.dto";
+import { User } from "../users/entities/user.entity";
+import { JwtToken } from "../../shared/common/interfaces/jwt-token.interface";
 
 @Controller()
 export class AuthController {
@@ -10,12 +12,14 @@ export class AuthController {
   }
 
   @MessagePattern("auth.register")
-  async register(@Payload() registerDto: RegisterDto) {
+  async register(
+    @Payload() registerDto: RegisterDto,
+  ): Promise<JwtToken> {
     return this.authService.register(registerDto);
   }
 
   @MessagePattern("auth.login")
-  async login(@Payload() loginDto: LoginDto) {
+  async login(@Payload() loginDto: LoginDto): Promise<JwtToken> {
     return this.authService.login(loginDto);
   }
 }

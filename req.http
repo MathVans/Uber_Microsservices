@@ -1,11 +1,11 @@
 # POST http://localhost:3000/auth/register
 # Content-Type: application/json
 
-# {
-#     "name": "Joana Doe",
-#     "email": "joana.doe@example.com",
-#     "password": "Secure123@"
-# }
+{
+    "name": "Joana Doe",
+    "email": "joana.doe@example.com",
+    "password": "Secure123@"
+}
 
 POST http://localhost:3000/auth/login
 Content-Type: application/json

@@ -1,51 +1,37 @@
-import { Injectable } from "@nestjs/common";
-import { CreateUserDto } from "./dto/create-user.dto";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, ObjectId, Types } from "mongoose";
+import { Model, Types } from "mongoose";
 import { User, UserDocument } from "./entities/user.entity";
-import * as bcrypt from "bcrypt";
+import { UserResponseDto } from "../../shared/common/dto/user-response.dto";
 
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async create(createUserDto: CreateUserDto) {
-    const existingUser = await this.findByEmail(createUserDto.email);
+  async findOne(id: Types.ObjectId): Promise<UserResponseDto> {
+    const user = await this.userModel.findById(id);
 
-    if (existingUser) {
-      // Throw exception
+    if (!user) {
+      throw new NotFoundException("Usuário não encontrado!");
     }
 
-    const salt = await bcrypt.genSalt();
+    return user;
+  }
 
-    const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
-
-    const createdUser = new this.userModel({
-      ...createUserDto,
-      password: hashedPassword,
+  async update(
+    id: Types.ObjectId,
+    updateUserDto: UpdateUserDto,
+  ): Promise<User> {
+    const user = await this.userModel.findByIdAndUpdate(id, {
+      ...updateUserDto,
     });
 
-    await createdUser.save();
-  }
+    if (!user) {
+      throw new NotFoundException("Usuário não encontrado!");
+    }
 
-  async findAll() {
-    return await this.userModel.find({});
-  }
-
-  findOne(id: string) {
-    // return this.users.find((user) => (user.id = id));
-  }
-
-  update(id: Types.ObjectId, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: string) {
-    return `This action removes a #${id} user`;
-  }
-
-  async findByEmail(email: string): Promise<UserDocument | null> {
-    return this.userModel.findOne({ email }).exec();
+    user.save();
+    return user;
   }
 }
