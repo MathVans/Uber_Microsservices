@@ -6,11 +6,10 @@ import {
 import { InjectModel } from "@nestjs/mongoose";
 import { User, UserDocument } from "../users/entities/user.entity";
 import { Model } from "mongoose";
-import { RegisterDto } from "./dto/register.dto";
-import { LoginDto } from "./dto/login.dto";
+import { RegisterDto } from "@app/common/modules/auth/dto/register.dto";
+import { LoginDto } from "@app/common/modules/auth/dto/login.dto";
 import * as bcrypt from "bcrypt";
-
-import { JwtToken } from "../../shared/common/interfaces/jwt-token.interface";
+import { JwtToken } from "@app/common/shared/interfaces/jwt-token.interface";
 import { JwtService } from "@nestjs/jwt";
 
 @Injectable()

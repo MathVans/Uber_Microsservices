@@ -1,10 +1,8 @@
 import { Controller } from "@nestjs/common";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import { UsersService } from "./users.service";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { Types } from "mongoose";
+import { UpdateUserDto } from "@app/common/modules/user/dto/update-user.dto";
 import { User } from "./entities/user.entity";
-import { UserResponseDto } from "../../shared/common/dto/user-response.dto";
 
 @Controller()
 export class UsersController {

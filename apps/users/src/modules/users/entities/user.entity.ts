@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document, Types, UuidSchemaDefinition } from "mongoose";
+import { Document, Types } from "mongoose";
 import * as bcrypt from "bcrypt";
-import { JwtToken } from "apps/users/src/shared/common/interfaces/jwt-token.interface";
 import { Role } from "apps/users/src/shared/common/enum/role.enum";
 
 export type UserDocument = User & Document;
