@@ -1,6 +1,10 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import { MicroserviceOptions, Transport } from "@nestjs/microservices";
+import {
+  MicroserviceOptions,
+  RpcException,
+  Transport,
+} from "@nestjs/microservices";
 import { ValidationPipe } from "@nestjs/common";
 
 async function bootstrap() {
@@ -13,8 +17,13 @@ async function bootstrap() {
       },
     },
   );
-
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      exceptionFactory: (errors) => {
+        return new RpcException(errors);
+      },
+    }),
+  );
 
   await app.listen();
 }
