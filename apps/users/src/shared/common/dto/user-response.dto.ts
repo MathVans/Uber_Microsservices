@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 
 export class UserResponseDto {
-    id: Types.ObjectId;
+    id: string;
     name: string;
     email: string;
     role: string;

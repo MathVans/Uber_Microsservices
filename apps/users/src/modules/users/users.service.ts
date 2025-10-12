@@ -9,7 +9,7 @@ import { UserResponseDto } from "../../shared/common/dto/user-response.dto";
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async findOne(id: Types.ObjectId): Promise<UserResponseDto> {
+  async findOne(id: string): Promise<User> {
     const user = await this.userModel.findById(id);
 
     if (!user) {
@@ -20,7 +20,7 @@ export class UsersService {
   }
 
   async update(
-    id: Types.ObjectId,
+    id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<User> {
     const user = await this.userModel.findByIdAndUpdate(id, {

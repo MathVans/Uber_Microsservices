@@ -11,12 +11,12 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @MessagePattern("users.findOne")
-  findOne(@Payload() id: Types.ObjectId): Promise<UserResponseDto> {
+  findOne(@Payload() id: string): Promise<User> {
     return this.usersService.findOne(id);
   }
 
   @MessagePattern("users.update")
-  update(@Payload() updateUserDto: UpdateUserDto): Promise<UserResponseDto> {
+  update(@Payload() updateUserDto: UpdateUserDto): Promise<User> {
     const id = updateUserDto.id;
     return this.usersService.update(id, updateUserDto);
   }
