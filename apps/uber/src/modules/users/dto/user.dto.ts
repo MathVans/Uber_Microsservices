@@ -7,12 +7,11 @@ import {
     IsString,
     MinLength,
 } from "class-validator";
-import { Types } from "mongoose";
 
 export class UserDTO {
     @IsMongoId({ message: "O ID deve ser um ObjectId válido do MongoDB." })
     @IsOptional() // O ID é opcional pois será gerado automaticamente
-    id?: Types.ObjectId;
+    id: string;
 
     @IsEmail({}, { message: "O e-mail informado é inválido." })
     @IsNotEmpty({ message: "O campo e-mail é obrigatório." })
