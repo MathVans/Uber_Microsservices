@@ -20,18 +20,19 @@ export class UsersService {
   }
 
   async update(
-    id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<User> {
-    const user = await this.userModel.findByIdAndUpdate(id, {
-      ...updateUserDto,
-    });
+    const { id, ...data } = updateUserDto;
+    const updatedUser = await this.userModel.findByIdAndUpdate(
+      id,
+      data,
+      { new: true },
+    ).exec();
 
-    if (!user) {
+    if (!updatedUser) {
       throw new NotFoundException("Usuário não encontrado!");
     }
 
-    user.save();
-    return user;
+    return updatedUser;
   }
 }

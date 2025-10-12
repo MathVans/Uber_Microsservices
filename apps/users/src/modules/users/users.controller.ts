@@ -17,7 +17,6 @@ export class UsersController {
 
   @MessagePattern("users.update")
   update(@Payload() updateUserDto: UpdateUserDto): Promise<User> {
-    const id = updateUserDto.id;
-    return this.usersService.update(id, updateUserDto);
+    return this.usersService.update(updateUserDto);
   }
 }

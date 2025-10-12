@@ -16,7 +16,7 @@ export class UsersController {
   update(
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.usersService.update(updateUserDto.id, updateUserDto);
+    return this.usersService.update(updateUserDto);
   }
 
   @Get("/:id")
