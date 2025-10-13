@@ -1,16 +1,27 @@
-# POST http://localhost:3000/auth/register
-# Content-Type: application/json
-
-{
-    "name": "Joana Doe",
-    "email": "joana.doe@example.com",
-    "password": "Secure123@"
-}
-
-POST http://localhost:3000/auth/login
+POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "email": "joana.doe@example.com",
-    "password": "Secure123@"
+    "name": "Norma Doe",
+    "email": "norma.fontes@example.com",
+    "password": "Secure123@",
+    "role": "driver"
 }
+
+# POST http://localhost:3000/auth/login
+# Content-Type: application/json
+
+# {
+#     "email": "norma.maps@example.com",
+#     "password": "Secure123@"
+# }
+
+# GET http://localhost:3000/users/68ed511400d993a832046e74
+# Content-Type: application/json
+
+# {
+# }
+
+
+
+
