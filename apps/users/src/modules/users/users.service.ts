@@ -1,38 +1,58 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { UpdateUserDto } from "@app/common/modules/user/dto/update-user.dto";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, Types } from "mongoose";
+import { Model } from "mongoose";
 import { User, UserDocument } from "./entities/user.entity";
-import { UserResponseDto } from "../../../../../libs/common/src/modules/user/dto/user-response.dto";
+import { RpcException } from "@nestjs/microservices";
 
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async findOne(id: string): Promise<User> {
-    const user = await this.userModel.findById(id);
+    try {
+      const user = await this.userModel.findById(id);
 
-    if (!user) {
-      throw new NotFoundException("Usuário não encontrado!");
+      if (!user) {
+        throw new RpcException({
+          status: HttpStatus.NOT_FOUND,
+          message: "Usuário não encontrado",
+        });
+      }
+
+      return user;
+    } catch (error) {
+      throw new RpcException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error,
+      });
     }
-
-    return user;
   }
 
   async update(
     updateUserDto: UpdateUserDto,
   ): Promise<User> {
-    const { id, ...data } = updateUserDto;
-    const updatedUser = await this.userModel.findByIdAndUpdate(
-      id,
-      data,
-      { new: true },
-    ).exec();
+    try {
+      const { id, ...data } = updateUserDto;
+      const updatedUser = await this.userModel.findByIdAndUpdate(
+        id,
+        data,
+        { new: true },
+      ).exec();
 
-    if (!updatedUser) {
-      throw new NotFoundException("Usuário não encontrado!");
+      if (!updatedUser) {
+        throw new RpcException({
+          statusCode: HttpStatus.NOT_FOUND,
+          message: "Usuário não encontrado",
+        });
+      }
+
+      return updatedUser;
+    } catch (error) {
+      throw new RpcException({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        error,
+      });
     }
-
-    return updatedUser;
   }
 }

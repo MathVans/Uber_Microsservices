@@ -2,7 +2,10 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "declaration": false,
-    "outDir": "../../dist/apps/uber"
+    "outDir": "../../dist/apps/uber",
+    "module": "NodeNext",
+    "target": "ESNext"
+    // "strict": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]

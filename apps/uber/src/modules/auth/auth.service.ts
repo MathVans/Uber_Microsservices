@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ConflictException,
+  HttpException,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -21,11 +22,7 @@ export class AuthService {
       AUTH_PATTERNS.REGISTER,
       registerDto,
     );
-    try {
-      return lastValueFrom(observable);
-    } catch (error) {
-      throw new Error(error);
-    }
+    return lastValueFrom(observable);
   }
 
   async login(loginDto: LoginDto) {
