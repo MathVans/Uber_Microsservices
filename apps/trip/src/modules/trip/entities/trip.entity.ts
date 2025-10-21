@@ -13,19 +13,19 @@ export class Trip {
     @Prop({ type: Point, required: true })
     endLocation: Point;
 
-    @Prop({ required: true, type: String, enum: Object.values(TripStatus) })
+    @Prop({ required: false, type: String, enum: Object.values(TripStatus) })
     status: TripStatus;
 
     @Prop({ required: false })
-    driver_id;
+    driverId;
 
     @Prop({ required: true })
     passengerId: string;
 
-    @Prop({ required: true })
+    @Prop({ required: false })
     estimatedPrice: number;
 
-    @Prop({ required: true })
+    @Prop({ required: false })
     finalPrice: number;
 }
 
