@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ConflictException,
+  HttpStatus,
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
@@ -32,6 +33,7 @@ export class AuthService {
     const createdUser = await this.userModel.create({ ...registerDto });
 
     await createdUser.save();
+
     const payload = {
       email: createdUser.email,
       id: createdUser.id,
@@ -56,7 +58,10 @@ export class AuthService {
       .exec();
 
     if (!user || !user.password) {
-      throw new UnauthorizedException("Credenciais inválidas");
+      throw new RpcException({
+        statusCode: HttpStatus.UNAUTHORIZED,
+        message: "Credenciais inválidas",
+      });
     }
 
     const isPasswordMatching = await bcrypt.compare(
@@ -65,7 +70,10 @@ export class AuthService {
     );
 
     if (!isPasswordMatching) {
-      throw new UnauthorizedException("Credenciais inválidas");
+      throw new RpcException({
+        statusCode: HttpStatus.UNAUTHORIZED,
+        message: "Credenciais inválidas",
+      });
     }
 
     const payload = { email: user.email, id: user.id, role: user.role };

@@ -25,6 +25,8 @@ async function bootstrap() {
     }),
   );
 
+  app.useGlobalFilters();
+
   await app.listen();
 }
 bootstrap();

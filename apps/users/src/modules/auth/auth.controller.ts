@@ -1,4 +1,4 @@
-import { Controller } from "@nestjs/common";
+import { Controller, UseFilters } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import { RegisterDto } from "@app/common/modules/auth/dto/register.dto";
@@ -9,7 +9,6 @@ import { JwtToken } from "@app/common/shared/interfaces/jwt-token.interface";
 export class AuthController {
   constructor(private readonly authService: AuthService) {
   }
-
   @MessagePattern("auth.register")
   async register(
     @Payload() registerDto: RegisterDto,

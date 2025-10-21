@@ -19,6 +19,15 @@
         "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
     },
+    "trip": {
+      "type": "application",
+      "root": "apps/trip",
+      "entryFile": "main",
+      "sourceRoot": "apps/trip/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/trip/tsconfig.app.json"
+      }
+    },
     "uber": {
       "type": "application",
       "root": "apps/uber",
