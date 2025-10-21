@@ -13,12 +13,12 @@ export class TripService {
     return "This action adds a new trip";
   }
 
-  findAll() {
-    return `This action returns all trip`;
+  async findAll() {
+    return await this.tripModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} trip`;
+  async findOne(id: string) {
+    return await this.tripModel.findById(id);
   }
 
   update(id: number, updateTripDto: UpdateTripDto) {
