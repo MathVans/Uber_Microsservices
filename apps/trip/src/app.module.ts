@@ -5,5 +5,6 @@ import { mongoConfig } from "./shared/infra/database/database";
 
 @Module({
   imports: [MongooseModule.forRootAsync(mongoConfig), TripModule],
+  
 })
 export class AppModule {}

@@ -4,8 +4,7 @@
     "declaration": true,
     "outDir": "../../dist/libs/common",
     "module": "NodeNext",
-    "target": "ESNext",
-    "strict": false
+    "target": "ESNext"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
