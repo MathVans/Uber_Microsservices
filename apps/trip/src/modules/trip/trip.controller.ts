@@ -4,6 +4,7 @@ import { TripService } from "./trip.service";
 import { CreateTripDto } from "./dto/create-trip.dto";
 import { UpdateTripDto } from "./dto/update-trip.dto";
 import { TRIP_PATTERNS } from "@app/common/modules/trip/trip.patterns";
+import { EstimateTripDto } from "@app/common/modules/trip/dto/estimate-trip.dto";
 
 @Controller()
 export class TripController {
@@ -12,6 +13,11 @@ export class TripController {
   @MessagePattern(TRIP_PATTERNS.CREATE)
   create(@Payload() createTripDto: CreateTripDto) {
     return this.tripService.create(createTripDto);
+  }
+
+  @MessagePattern(TRIP_PATTERNS.ESTIMATE)
+  estimate(@Payload() estimateTripDto: EstimateTripDto) {
+    return this.tripService.estimate(estimateTripDto);
   }
 
   @MessagePattern(TRIP_PATTERNS.LIST)
