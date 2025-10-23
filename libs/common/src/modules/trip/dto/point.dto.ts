@@ -14,7 +14,5 @@ export class PointDto {
     @IsArray()
     @ArrayMinSize(2)
     @ArrayMaxSize(2)
-    @IsLongitude({ message: "A primeira coordenada (Longitude) é inválida." })
-    @IsLatitude({ message: "A segunda coordenada (Latitude) é inválida." })
     coordinates?: [number, number];
 }

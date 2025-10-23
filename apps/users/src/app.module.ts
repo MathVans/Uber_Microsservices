@@ -3,9 +3,11 @@ import { UsersModule } from "./modules/users/users.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { AuthModule } from "./modules/auth/auth.module";
 import { mongoConfig } from "./shared/infra/database/database";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env.users" }),
     MongooseModule.forRootAsync(mongoConfig),
     AuthModule,
     UsersModule,
