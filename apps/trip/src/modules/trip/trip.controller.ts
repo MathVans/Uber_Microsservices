@@ -30,11 +30,6 @@ export class TripController {
     return this.tripService.findUserId(id);
   }
 
-  @MessagePattern(TRIP_PATTERNS.LIST)
-  list() {
-    return this.tripService.findAll();
-  }
-
   @MessagePattern(TRIP_PATTERNS.CANCEL)
   cancel(@Payload() id: string) {
     return this.tripService.cancel(id);

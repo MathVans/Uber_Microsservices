@@ -10,6 +10,7 @@ import { HttpService } from "@nestjs/axios";
 import { ConfigService } from "@nestjs/config";
 import { firstValueFrom } from "rxjs";
 import { TripStatus } from "@app/common/shared/enum/trip-status.enum";
+import { TripResponseDto } from "@app/common/modules/trip/dto/tripResponse.dto";
 
 @Injectable()
 export class TripService {
@@ -30,94 +31,13 @@ export class TripService {
     ) || "your-api-key";
   }
 
-  async estimate(
-    estimateTripDto: EstimateTripDto,
-  ): Promise<EstimateTripResponse> {
-    const requestBody = {
-      origins: [
-        {
-          waypoint: {
-            location: {
-              latLng: {
-                latitude: estimateTripDto.startLocation.coordinates[1],
-                longitude: estimateTripDto.startLocation.coordinates[0],
-              },
-            },
-          },
-        },
-      ],
-      destinations: [
-        {
-          waypoint: {
-            location: {
-              latLng: {
-                latitude: estimateTripDto.endLocation.coordinates[1],
-                longitude: estimateTripDto.endLocation.coordinates[0],
-              },
-            },
-          },
-        },
-      ],
-      travelMode: "DRIVE",
-      routingPreference: "TRAFFIC_AWARE",
-    };
-
-    const headers = {
-      "Content-Type": "application/json",
-      "X-Goog-Api-Key": this.googleMapsApiKey,
-      "X-Goog-FieldMask":
-        "originIndex,destinationIndex,status,condition,distanceMeters,duration",
-    };
-
+  async create(createTripDto: CreateTripDto): Promise<TripResponseDto> {
     try {
-      const response = await firstValueFrom(
-        this.httpService.post(this.googleMapsApiUrl, requestBody, { headers }),
-      );
-
-      if (
-        response.statusText != "OK" ||
-        response.data[0].condition != "ROUTE_EXISTS"
-      ) {
-        throw new RpcException({
-          statusCode: HttpStatus.NOT_FOUND,
-          message: "Não foi possivel encontrar a rota da Google Api.",
-        });
-      }
-
-      const route = response.data[0];
-
-      const distanceInMeters: number = route.distanceMeters;
-      const durationInSeconds: number = parseFloat(
-        route.duration.replace("s", ""),
-      );
-      const price = this.calculatePrice(distanceInMeters, durationInSeconds);
-      console.log("🚀 ~ TripService ~ estimate ~ price:", price);
-
-      return {
-        estimatedPrice: price,
-        currency: "BRL",
-        distance: route.distance,
-        duration: route.duration,
-      };
-    } catch (error) {
-      console.error(
-        "Erro ao chamar Google Routes API:",
-        error,
-      );
-
-      throw new RpcException({
-        statusCode: HttpStatus.BAD_GATEWAY,
-        message: "Não foi possível calcular a estimativa da rota.",
-      });
-    }
-  }
-
-  async create(createTripDto: CreateTripDto): Promise<Trip> {
-    try {
-      return await this.tripModel.create({
+      const trip = await this.tripModel.create({
         ...createTripDto,
         status: "requested",
       });
+      return this.mapToResponseDto(trip);
     } catch (error) {
       throw new RpcException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -229,18 +149,7 @@ export class TripService {
     }
   }
 
-  async findAll(): Promise<Trip[]> {
-    try {
-      return await this.tripModel.find();
-    } catch (error) {
-      throw new RpcException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: error,
-      });
-    }
-  }
-
-  async findOne(tripId: string): Promise<Trip> {
+  async findOne(tripId: string): Promise<TripResponseDto> {
     try {
       const trip = await this.tripModel.findById(tripId).exec();
       if (!trip) {
@@ -249,7 +158,7 @@ export class TripService {
           message: "Viagem não encontrada.",
         });
       }
-      return trip;
+      return this.mapToResponseDto(trip);
     } catch (error) {
       console.error(
         "Erro ao chamar Google Routes API:",
@@ -263,19 +172,18 @@ export class TripService {
     }
   }
 
-  async findUserId(id: string): Promise<Trip[]> {
+  async findUserId(id: string): Promise<TripResponseDto[]> {
     try {
       const trips = await this.tripModel.find({
-        passengerId: id,
-        driverId: id,
+        $or: [
+          { passengerId: id },
+          { driverId: id },
+        ],
       }).exec();
 
-      return trips;
+      return trips.map((trip) => this.mapToResponseDto(trip));
     } catch (error) {
-      console.error(
-        "Erro ao chamar Google Routes API:",
-        error,
-      );
+      console.error(`Erro ao buscar corridas para o usuário ID: ${id}`, error);
 
       throw new RpcException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -299,5 +207,107 @@ export class TripService {
       (durationInMinutes * PER_MINUTE_RATE);
 
     return parseFloat(price.toFixed(2));
+  }
+
+  async estimate(
+    estimateTripDto: EstimateTripDto,
+  ): Promise<EstimateTripResponse> {
+    const requestBody = {
+      origins: [
+        {
+          waypoint: {
+            location: {
+              latLng: {
+                latitude: estimateTripDto.startLocation.coordinates[1],
+                longitude: estimateTripDto.startLocation.coordinates[0],
+              },
+            },
+          },
+        },
+      ],
+      destinations: [
+        {
+          waypoint: {
+            location: {
+              latLng: {
+                latitude: estimateTripDto.endLocation.coordinates[1],
+                longitude: estimateTripDto.endLocation.coordinates[0],
+              },
+            },
+          },
+        },
+      ],
+      travelMode: "DRIVE",
+      routingPreference: "TRAFFIC_AWARE",
+    };
+
+    const headers = {
+      "Content-Type": "application/json",
+      "X-Goog-Api-Key": this.googleMapsApiKey,
+      "X-Goog-FieldMask":
+        "originIndex,destinationIndex,status,condition,distanceMeters,duration",
+    };
+
+    try {
+      const response = await firstValueFrom(
+        this.httpService.post(this.googleMapsApiUrl, requestBody, { headers }),
+      );
+
+      if (
+        response.statusText != "OK" ||
+        response.data[0].condition != "ROUTE_EXISTS"
+      ) {
+        throw new RpcException({
+          statusCode: HttpStatus.NOT_FOUND,
+          message: "Não foi possivel encontrar a rota da Google Api.",
+        });
+      }
+
+      const route = response.data[0];
+
+      const distanceInMeters: number = route.distanceMeters;
+      const durationInSeconds: number = parseFloat(
+        route.duration.replace("s", ""),
+      );
+      const price = this.calculatePrice(distanceInMeters, durationInSeconds);
+      console.log("🚀 ~ TripService ~ estimate ~ price:", price);
+
+      return {
+        estimatedPrice: price,
+        currency: "BRL",
+        distance: route.distance,
+        duration: route.duration,
+      };
+    } catch (error) {
+      console.error(
+        "Erro ao chamar Google Routes API:",
+        error,
+      );
+
+      throw new RpcException({
+        statusCode: HttpStatus.BAD_GATEWAY,
+        message: "Não foi possível calcular a estimativa da rota.",
+      });
+    }
+  }
+
+  private mapToResponseDto(trip: TripDocument): TripResponseDto {
+    return {
+      id: trip._id.toString(),
+      passengerId: trip.passengerId,
+      driverId: trip.driverId,
+      status: trip.status,
+      startLocation: {
+        type: "Point",
+        coordinates: trip.startLocation.coordinates as [number, number],
+      },
+      endLocation: {
+        type: "Point",
+        coordinates: trip.endLocation.coordinates as [number, number],
+      },
+      estimatedPrice: trip.estimatedPrice,
+      finalPrice: trip.finalPrice,
+      createdAt: trip.createdAt.toISOString(),
+    };
   }
 }
