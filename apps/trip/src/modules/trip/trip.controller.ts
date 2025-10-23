@@ -10,19 +10,14 @@ import { EstimateTripDto } from "@app/common/modules/trip/dto/estimate-trip.dto"
 export class TripController {
   constructor(private readonly tripService: TripService) {}
 
-  @MessagePattern(TRIP_PATTERNS.CREATE)
-  create(@Payload() createTripDto: CreateTripDto) {
-    return this.tripService.create(createTripDto);
-  }
-
   @MessagePattern(TRIP_PATTERNS.ESTIMATE)
   estimate(@Payload() estimateTripDto: EstimateTripDto) {
     return this.tripService.estimate(estimateTripDto);
   }
 
-  @MessagePattern(TRIP_PATTERNS.LIST)
-  list() {
-    return this.tripService.findAll();
+  @MessagePattern(TRIP_PATTERNS.CREATE)
+  create(@Payload() createTripDto: CreateTripDto) {
+    return this.tripService.create(createTripDto);
   }
 
   @MessagePattern(TRIP_PATTERNS.FIND_ONE)
@@ -35,9 +30,9 @@ export class TripController {
     return this.tripService.findUserId(id);
   }
 
-  @MessagePattern(TRIP_PATTERNS.START)
-  start(@Payload() id: string) {
-    return this.tripService.start(id);
+  @MessagePattern(TRIP_PATTERNS.LIST)
+  list() {
+    return this.tripService.findAll();
   }
 
   @MessagePattern(TRIP_PATTERNS.CANCEL)
@@ -45,13 +40,18 @@ export class TripController {
     return this.tripService.cancel(id);
   }
 
-  @MessagePattern(TRIP_PATTERNS.FINISH)
-  finish(@Payload() id: string) {
-    return this.tripService.finish(id);
-  }
-
   @MessagePattern(TRIP_PATTERNS.ACCEPT)
   accept(@Payload() id: string) {
     return this.tripService.accept(id);
+  }
+
+  @MessagePattern(TRIP_PATTERNS.START)
+  start(@Payload() id: string) {
+    return this.tripService.start(id);
+  }
+
+  @MessagePattern(TRIP_PATTERNS.FINISH)
+  finish(@Payload() id: string) {
+    return this.tripService.finish(id);
   }
 }
