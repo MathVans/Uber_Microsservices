@@ -13,7 +13,4 @@ export class EstimateTripDto {
     @Type(() => PointDto)
     @IsNotEmpty()
     endLocation: PointDto;
-    
-    @IsEnum(TripTypeEnum)
-    type: TripTypeEnum;
 }

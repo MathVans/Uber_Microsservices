@@ -31,7 +31,7 @@ export class TripService {
     return await lastValueFrom(result);
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<TripResponseDto> {
     const result = this.tripClient.send(
       TRIP_PATTERNS.FIND_ONE,
       id,
@@ -40,14 +40,42 @@ export class TripService {
     return await lastValueFrom(result);
   }
 
-  async findByUser(id: string) {
+  async findByUser(id: string): Promise<TripResponseDto[]> {
     const result = this.tripClient.send(
       TRIP_PATTERNS.FIND_BY_USER,
       id,
     );
-
     return await lastValueFrom(result);
   }
 
-  
+  async cancel(tripId: string): Promise<boolean> {
+    const result = this.tripClient.send(
+      TRIP_PATTERNS.CANCEL,
+      tripId,
+    );
+    return await lastValueFrom(result);
+  }
+
+  async accept(tripId: string): Promise<boolean> {
+    const result = this.tripClient.send(
+      TRIP_PATTERNS.ACCEPT,
+      tripId,
+    );
+    return await lastValueFrom(result);
+  }
+
+  async start(tripId: string): Promise<boolean> {
+    const result = this.tripClient.send(
+      TRIP_PATTERNS.START,
+      tripId,
+    );
+    return await lastValueFrom(result);
+  }
+  async finish(tripId: string): Promise<boolean> {
+    const result = this.tripClient.send(
+      TRIP_PATTERNS.FINISH,
+      tripId,
+    );
+    return await lastValueFrom(result);
+  }
 }

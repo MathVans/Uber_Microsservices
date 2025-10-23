@@ -24,4 +24,20 @@ Content-Type: application/json
 
 
 
+# {
+# 	"accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRyaXZlckBleGFtcGxlLmNvbSIsImlkIjoiNjhmYTdhMmRkYzdmZDQ0ZGE4MTBlN2M4Iiwicm9sZSI6ImRyaXZlciIsImlhdCI6MTc2MTI0NTc0MSwiZXhwIjoxNzYxMzMyMTQxfQ.vs5c1mA_PkjUbDFbw45EqUUZ1cArZlJPQgASkjXkPdg",
+# 	"name": "driver",
+# 	"email": "driver@example.com",
+# 	"role": "driver",
+# 	"id": "68fa7a2ddc7fd44da810e7c8"
+# }
+
+
+# {
+# 	"accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBhc3NlbmdlckBleGFtcGxlLmNvbSIsImlkIjoiNjhmYTdhNjFkYzdmZDQ0ZGE4MTBlN2NjIiwicm9sZSI6InJpZGVyIiwiaWF0IjoxNzYxMjQ1NzkzLCJleHAiOjE3NjEzMzIxOTN9.PNZCXvTMh6hJ8zquqIr-KaN8R_5c7MrYREQNb6ANO58",
+# 	"name": "passenger",
+# 	"email": "passenger@example.com",
+# 	"role": "rider",
+# 	"id": "68fa7a61dc7fd44da810e7cc"
+# }
 
