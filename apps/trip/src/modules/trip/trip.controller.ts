@@ -30,23 +30,28 @@ export class TripController {
     return this.tripService.findOne(id);
   }
 
+  @MessagePattern(TRIP_PATTERNS.FIND_BY_USER)
+  findByUser(@Payload() id: string) {
+    return this.tripService.findUserId(id);
+  }
+
   @MessagePattern(TRIP_PATTERNS.START)
-  start(@Payload() id: number) {
-    // return this.tripService.findOne(id);
+  start(@Payload() id: string) {
+    return this.tripService.start(id);
   }
 
   @MessagePattern(TRIP_PATTERNS.CANCEL)
-  cancel(@Payload() id: number) {
-    // return this.tripService.findOne(id);
+  cancel(@Payload() id: string) {
+    return this.tripService.cancel(id);
   }
 
   @MessagePattern(TRIP_PATTERNS.FINISH)
-  finish(@Payload() id: number) {
-    // return this.tripService.findOne(id);
+  finish(@Payload() id: string) {
+    return this.tripService.finish(id);
   }
 
   @MessagePattern(TRIP_PATTERNS.ACCEPT)
-  accept(@Payload() id: number) {
-    // return this.tripService.findOne(id);
+  accept(@Payload() id: string) {
+    return this.tripService.accept(id);
   }
 }
