@@ -23,20 +23,26 @@ export class TripService {
     this.googleMapsApiKey = this.configService.get<string>(
       "GOOGLE_MAPS_API_KEY",
     ) || "your-api-key";
+    console.log(
+      "🚀 ~ TripService ~ constructor ~ this.googleMapsApiKey:",
+      this.googleMapsApiKey,
+    );
     this.googleMapsApiUrl = this.configService.get<string>(
       "GOOGLE_MAPS_API_URL",
     ) || "your-api-key";
+    console.log(
+      "🚀 ~ TripService ~ constructor ~ this.googleMapsApiUrl:",
+      this.googleMapsApiUrl,
+    );
   }
 
   async estimate(
     estimateTripDto: EstimateTripDto,
   ): Promise<EstimateTripResponse> {
-    const origin = `${estimateTripDto.startLocation.coordinates[1]},${
-      estimateTripDto.startLocation.coordinates[0]
-    }`;
-    const destination = `${estimateTripDto.endLocation.coordinates[1]},${
-      estimateTripDto.endLocation.coordinates[0]
-    }`;
+    console.log(
+      "🚀 ~ TripService ~ estimate ~ estimateTripDto:",
+      estimateTripDto,
+    );
 
     const requestBody = {
       origins: [
@@ -104,7 +110,7 @@ export class TripService {
     } catch (error) {
       console.error(
         "Erro ao chamar Google Routes API:",
-        error.response?.data || error.message,
+        error,
       );
 
       throw new RpcException({
@@ -152,7 +158,7 @@ export class TripService {
     } catch (error) {
       console.error(
         "Erro ao chamar Google Routes API:",
-        error.response?.data || error.message,
+        error,
       );
 
       throw new RpcException({
