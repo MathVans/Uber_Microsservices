@@ -23,27 +23,15 @@ export class TripService {
     this.googleMapsApiKey = this.configService.get<string>(
       "GOOGLE_MAPS_API_KEY",
     ) || "your-api-key";
-    console.log(
-      "🚀 ~ TripService ~ constructor ~ this.googleMapsApiKey:",
-      this.googleMapsApiKey,
-    );
+
     this.googleMapsApiUrl = this.configService.get<string>(
       "GOOGLE_MAPS_API_URL",
     ) || "your-api-key";
-    console.log(
-      "🚀 ~ TripService ~ constructor ~ this.googleMapsApiUrl:",
-      this.googleMapsApiUrl,
-    );
   }
 
   async estimate(
     estimateTripDto: EstimateTripDto,
   ): Promise<EstimateTripResponse> {
-    console.log(
-      "🚀 ~ TripService ~ estimate ~ estimateTripDto:",
-      estimateTripDto,
-    );
-
     const requestBody = {
       origins: [
         {
@@ -85,7 +73,12 @@ export class TripService {
         this.httpService.post(this.googleMapsApiUrl, requestBody, { headers }),
       );
 
-      if (response.data.status != "OK" || response.data.routes[0]) {
+      console.log("🚀 ~ TripService ~ estimate ~ response:", response);
+
+      if (
+        response.statusText != "OK" ||
+        response.data[0].condition != "ROUTE_EXISTS"
+      ) {
         throw new RpcException({
           statusCode: HttpStatus.NOT_FOUND,
           message: "Não foi possivel encontrar a rota da Google Api.",
@@ -104,8 +97,8 @@ export class TripService {
       return {
         estimatedPrice: price,
         currency: "BRL",
-        distance: route.distance.text,
-        duration: route.duration.text,
+        distance: route.distance,
+        duration: route.duration,
       };
     } catch (error) {
       console.error(
