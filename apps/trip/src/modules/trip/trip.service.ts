@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
-import { CreateTripDto } from "./dto/create-trip.dto";
+import { CreateTripDto } from "@app/common/modules/trip/dto/create-trip.dto";
 import { InjectModel } from "@nestjs/mongoose";
 import { Trip, TripDocument } from "./entities/trip.entity";
 import { Model } from "mongoose";
@@ -31,11 +31,95 @@ export class TripService {
     ) || "your-api-key";
   }
 
+  async estimate(
+    estimateTripDto: EstimateTripDto,
+  ): Promise<EstimateTripResponse> {
+    const requestBody = {
+      origins: [
+        {
+          waypoint: {
+            location: {
+              latLng: {
+                latitude: estimateTripDto.startLocation.coordinates[1],
+                longitude: estimateTripDto.startLocation.coordinates[0],
+              },
+            },
+          },
+        },
+      ],
+      destinations: [
+        {
+          waypoint: {
+            location: {
+              latLng: {
+                latitude: estimateTripDto.endLocation.coordinates[1],
+                longitude: estimateTripDto.endLocation.coordinates[0],
+              },
+            },
+          },
+        },
+      ],
+      travelMode: "DRIVE",
+      routingPreference: "TRAFFIC_AWARE",
+    };
+
+    const headers = {
+      "Content-Type": "application/json",
+      "X-Goog-Api-Key": this.googleMapsApiKey,
+      "X-Goog-FieldMask":
+        "originIndex,destinationIndex,status,condition,distanceMeters,duration",
+    };
+
+    try {
+      const response = await firstValueFrom(
+        this.httpService.post(this.googleMapsApiUrl, requestBody, { headers }),
+      );
+
+      if (
+        response.statusText != "OK" ||
+        response.data[0].condition != "ROUTE_EXISTS"
+      ) {
+        throw new RpcException({
+          statusCode: HttpStatus.NOT_FOUND,
+          message: "Não foi possivel encontrar a rota da Google Api.",
+        });
+      }
+
+      const route = response.data[0];
+
+      const distanceInMeters: number = route.distanceMeters;
+      const durationInSeconds: number = parseFloat(
+        route.duration.replace("s", ""),
+      );
+      const price = this.calculatePrice(distanceInMeters, durationInSeconds);
+
+      return {
+        estimatedPrice: price,
+        currency: "BRL",
+        distance: route.distance,
+        duration: route.duration,
+      };
+    } catch (error) {
+      console.error(
+        "Erro ao chamar Google Routes API:",
+        error,
+      );
+
+      throw new RpcException({
+        statusCode: HttpStatus.BAD_GATEWAY,
+        message: "Não foi possível calcular a estimativa da rota.",
+      });
+    }
+  }
+
   async create(createTripDto: CreateTripDto): Promise<TripResponseDto> {
     try {
+      const { startLocation, endLocation } = createTripDto;
+      const estimate = await this.estimate({ startLocation, endLocation });
       const trip = await this.tripModel.create({
         ...createTripDto,
         status: "requested",
+        estimatedPrice: estimate.estimatedPrice,
       });
       return this.mapToResponseDto(trip);
     } catch (error) {
@@ -74,9 +158,11 @@ export class TripService {
 
   async accept(tripId: string): Promise<boolean> {
     try {
+      const oldTrip = await this.tripModel.findById(tripId);
       const updateData = {
         $set: {
           status: TripStatus.ACCEPTED,
+          finalPrice: oldTrip.estimatedPrice,
         },
       };
 
@@ -207,88 +293,6 @@ export class TripService {
       (durationInMinutes * PER_MINUTE_RATE);
 
     return parseFloat(price.toFixed(2));
-  }
-
-  async estimate(
-    estimateTripDto: EstimateTripDto,
-  ): Promise<EstimateTripResponse> {
-    const requestBody = {
-      origins: [
-        {
-          waypoint: {
-            location: {
-              latLng: {
-                latitude: estimateTripDto.startLocation.coordinates[1],
-                longitude: estimateTripDto.startLocation.coordinates[0],
-              },
-            },
-          },
-        },
-      ],
-      destinations: [
-        {
-          waypoint: {
-            location: {
-              latLng: {
-                latitude: estimateTripDto.endLocation.coordinates[1],
-                longitude: estimateTripDto.endLocation.coordinates[0],
-              },
-            },
-          },
-        },
-      ],
-      travelMode: "DRIVE",
-      routingPreference: "TRAFFIC_AWARE",
-    };
-
-    const headers = {
-      "Content-Type": "application/json",
-      "X-Goog-Api-Key": this.googleMapsApiKey,
-      "X-Goog-FieldMask":
-        "originIndex,destinationIndex,status,condition,distanceMeters,duration",
-    };
-
-    try {
-      const response = await firstValueFrom(
-        this.httpService.post(this.googleMapsApiUrl, requestBody, { headers }),
-      );
-
-      if (
-        response.statusText != "OK" ||
-        response.data[0].condition != "ROUTE_EXISTS"
-      ) {
-        throw new RpcException({
-          statusCode: HttpStatus.NOT_FOUND,
-          message: "Não foi possivel encontrar a rota da Google Api.",
-        });
-      }
-
-      const route = response.data[0];
-
-      const distanceInMeters: number = route.distanceMeters;
-      const durationInSeconds: number = parseFloat(
-        route.duration.replace("s", ""),
-      );
-      const price = this.calculatePrice(distanceInMeters, durationInSeconds);
-      console.log("🚀 ~ TripService ~ estimate ~ price:", price);
-
-      return {
-        estimatedPrice: price,
-        currency: "BRL",
-        distance: route.distance,
-        duration: route.duration,
-      };
-    } catch (error) {
-      console.error(
-        "Erro ao chamar Google Routes API:",
-        error,
-      );
-
-      throw new RpcException({
-        statusCode: HttpStatus.BAD_GATEWAY,
-        message: "Não foi possível calcular a estimativa da rota.",
-      });
-    }
   }
 
   private mapToResponseDto(trip: TripDocument): TripResponseDto {
