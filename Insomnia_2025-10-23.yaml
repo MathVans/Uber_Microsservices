@@ -1,0 +1,375 @@
+type: collection.insomnia.rest/5.0
+name: uber
+meta:
+  id: wrk_b78616e2717341b48481cff328711dfe
+  created: 1761046097721
+  modified: 1761220239908
+  description: ""
+collection:
+  - name: users
+    meta:
+      id: fld_b62e41ec42274830843fdf2ad346c1f5
+      created: 1761054757113
+      modified: 1761054757113
+      sortKey: -1761054757113
+      description: ""
+    children:
+      - url: localhost:3000/auth/login
+        name: auth/login
+        meta:
+          id: req_9e2b8a555aa24da88d67dd615847de12
+          created: 1761046097731
+          modified: 1761245698623
+          isPrivate: false
+          description: ""
+          sortKey: -1761054772821
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            "email": "passenger@example.com",
+             "password":"Secure123@"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:3000/auth/register
+        name: auth/register
+        meta:
+          id: req_b8943232428540819a1da77e34f203bb
+          created: 1761046357765
+          modified: 1761245791751
+          isPrivate: false
+          description: ""
+          sortKey: -1761054772721
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                "name": "passenger",
+                "email": "passenger@example.com",
+                "password": "Secure123@",
+                "role": "rider"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:3000/users/me
+        name: users/me
+        meta:
+          id: req_b4d8e56206fb44d4bbaa46377aab9c43
+          created: 1761046376206
+          modified: 1761054772446
+          isPrivate: false
+          description: ""
+          sortKey: -1761054772421
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:3000/users
+        name: users/:id
+        meta:
+          id: req_fcbc66224ad9439d851a512427c99e6f
+          created: 1761046406308
+          modified: 1761055455982
+          isPrivate: false
+          description: ""
+          sortKey: -1761054772621
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:3000/users/me
+        name: users/me
+        meta:
+          id: req_417f8262b4374abfa37cddbe7ff2b8bb
+          created: 1761046445426
+          modified: 1761054775568
+          isPrivate: false
+          description: ""
+          sortKey: -1761054772521
+        method: PATCH
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: trip
+    meta:
+      id: fld_d687010077cc42c4b9ad50ebc9d2c44f
+      created: 1761220260281
+      modified: 1761220260281
+      sortKey: -1761220260281
+      description: ""
+    children:
+      - url: http://localhost:3000/trip/estimate
+        name: trip/estimate
+        meta:
+          id: req_d38c8bb71c204ad0aceea6da7a90a9f8
+          created: 1761221620763
+          modified: 1761247047834
+          isPrivate: false
+          description: ""
+          sortKey: -1761245837804
+        method: POST
+        body:
+          mimeType: application/json
+          text: |
+            {
+              "startLocation": {
+                "type": "Point",
+                "coordinates": [-38.412748, -12.939633]
+              },
+              "endLocation": {
+                "type": "Point",
+                "coordinates": [-38.477316, -12.974565]
+              },
+            	"type": "DRIVE"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/trip
+        name: trip/
+        meta:
+          id: req_6ae48b8d959241aea35121b230ec91b0
+          created: 1761245837704
+          modified: 1761247526946
+          isPrivate: false
+          description: ""
+          sortKey: -1761245837704
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "passengerId": "68fa7a61dc7fd44da810e7cc",
+              "startLocation": {
+                "type": "Point",
+                "coordinates": [-38.412748, -12.939633]
+              },
+              "endLocation": {
+                "type": "Point",
+                "coordinates": [-38.477316, -12.974565]
+              }
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/trip/68fa7ed8035f4094b1abeff3
+        name: trip/{id}
+        meta:
+          id: req_f65841f0d4e5463792d504c4959d60b7
+          created: 1761247051012
+          modified: 1761247106497
+          isPrivate: false
+          description: ""
+          sortKey: -1761245837604
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/trip
+        name: trip/
+        meta:
+          id: req_40897335079e4dcfafbc1c2f9dd87b7e
+          created: 1761247114839
+          modified: 1761247788182
+          isPrivate: false
+          description: ""
+          sortKey: -1761150305212.5
+        method: GET
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"id": "68fa7a61dc7fd44da810e7cc"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/trip/68fa7ed8035f4094b1abeff3/cancel
+        name: trips/{id}/cancel
+        meta:
+          id: req_6f89c7f0a7184f13bd086442a7fc200f
+          created: 1761247534798
+          modified: 1761247695888
+          isPrivate: false
+          description: ""
+          sortKey: -1761150305112.5
+        method: POST
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/trip/68fa7ed8035f4094b1abeff3/accept
+        name: trips/{id}/accept
+        meta:
+          id: req_0c7a7e3f00354a81806654d20b80080f
+          created: 1761247581045
+          modified: 1761247856018
+          isPrivate: false
+          description: ""
+          sortKey: -1761102538966.75
+        method: POST
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/trip/68fa7ed8035f4094b1abeff3/start
+        name: trips/{id}/start
+        meta:
+          id: req_33aa90e48e9e4996a3d9879b89d83fcb
+          created: 1761247586739
+          modified: 1761247859689
+          isPrivate: false
+          description: ""
+          sortKey: -1761096568198.5312
+        method: POST
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/trip/68fa7ed8035f4094b1abeff3/finish
+        name: trips/{id}/finish
+        meta:
+          id: req_b7ded56730f0463cba7ee3c9bb90115f
+          created: 1761247595681
+          modified: 1761247863015
+          isPrivate: false
+          description: ""
+          sortKey: -1761090597430.3125
+        method: POST
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_09096073bf45c8a3d5bfe8c44cd772e76e2f2aa6
+    created: 1761046097724
+    modified: 1761046097724
+environments:
+  name: Base Environment
+  meta:
+    id: env_09096073bf45c8a3d5bfe8c44cd772e76e2f2aa6
+    created: 1761046097723
+    modified: 1761046097723
+    isPrivate: false
