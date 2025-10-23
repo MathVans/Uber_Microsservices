@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { PointDto } from "./point.dto"; // Reutilize o DTO do Point
-
+import { PointDto } from "./point.dto";
+import { TripStatus } from "@app/common/shared/enum/trip-status.enum";
 export class TripResponseDto {
     @ApiProperty()
     id: string;
@@ -12,13 +12,19 @@ export class TripResponseDto {
     driverId?: string;
 
     @ApiProperty()
-    status: string;
+    startLocation?: PointDto;
 
     @ApiProperty()
-    startLocation: PointDto;
+    endLocation?: PointDto;
+
+    @ApiProperty({ enum: TripStatus })
+    status: TripStatus;
 
     @ApiProperty()
-    endLocation: PointDto;
+    estimatedPrice?: number;
+
+    @ApiProperty()
+    finalPrice?: number;
 
     @ApiProperty()
     createdAt: string;
