@@ -9,6 +9,7 @@ import { EstimateTripResponse } from "@app/common/modules/trip/dto/estimate-trip
 import { HttpService } from "@nestjs/axios";
 import { ConfigService } from "@nestjs/config";
 import { firstValueFrom } from "rxjs";
+import { TripStatus } from "@app/common/shared/enum/trip-status.enum";
 
 @Injectable()
 export class TripService {
@@ -58,7 +59,7 @@ export class TripService {
         },
       ],
       travelMode: "DRIVE",
-      routingPreference: "TRAFFIC_AWARE", // Pega a estimativa com tráfego
+      routingPreference: "TRAFFIC_AWARE",
     };
 
     const headers = {
@@ -72,8 +73,6 @@ export class TripService {
       const response = await firstValueFrom(
         this.httpService.post(this.googleMapsApiUrl, requestBody, { headers }),
       );
-
-      console.log("🚀 ~ TripService ~ estimate ~ response:", response);
 
       if (
         response.statusText != "OK" ||
@@ -127,6 +126,109 @@ export class TripService {
     }
   }
 
+  async cancel(tripId: string): Promise<boolean> {
+    try {
+      const updateData = {
+        $set: {
+          status: TripStatus.CANCELED,
+        },
+      };
+
+      const trip = await this.tripModel.findByIdAndUpdate(tripId, updateData)
+        .exec();
+
+      if (!trip) {
+        throw new RpcException({
+          statusCode: HttpStatus.NOT_FOUND,
+          message: "Viagem não encontrada.",
+        });
+      }
+      return !!trip;
+    } catch (error) {
+      throw new RpcException({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error,
+      });
+    }
+  }
+
+  async accept(tripId: string): Promise<boolean> {
+    try {
+      const updateData = {
+        $set: {
+          status: TripStatus.ACCEPTED,
+        },
+      };
+
+      const trip = await this.tripModel.findByIdAndUpdate(tripId, updateData)
+        .exec();
+
+      if (!trip) {
+        throw new RpcException({
+          statusCode: HttpStatus.NOT_FOUND,
+          message: "Viagem não encontrada.",
+        });
+      }
+      return !!trip;
+    } catch (error) {
+      throw new RpcException({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error,
+      });
+    }
+  }
+
+  async start(tripId: string): Promise<boolean> {
+    try {
+      const updateData = {
+        $set: {
+          status: TripStatus.IN_PROGRESS,
+        },
+      };
+
+      const trip = await this.tripModel.findByIdAndUpdate(tripId, updateData)
+        .exec();
+
+      if (!trip) {
+        throw new RpcException({
+          statusCode: HttpStatus.NOT_FOUND,
+          message: "Viagem não encontrada.",
+        });
+      }
+      return !!trip;
+    } catch (error) {
+      throw new RpcException({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error,
+      });
+    }
+  }
+  async finish(tripId: string): Promise<boolean> {
+    try {
+      const updateData = {
+        $set: {
+          status: TripStatus.COMPLETED,
+        },
+      };
+
+      const trip = await this.tripModel.findByIdAndUpdate(tripId, updateData)
+        .exec();
+
+      if (!trip) {
+        throw new RpcException({
+          statusCode: HttpStatus.NOT_FOUND,
+          message: "Viagem não encontrada.",
+        });
+      }
+      return !!trip;
+    } catch (error) {
+      throw new RpcException({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error,
+      });
+    }
+  }
+
   async findAll(): Promise<Trip[]> {
     try {
       return await this.tripModel.find();
@@ -138,16 +240,37 @@ export class TripService {
     }
   }
 
-  async findOne(id: string): Promise<Trip> {
+  async findOne(tripId: string): Promise<Trip> {
     try {
-      const result = await this.tripModel.findById(id);
-      if (!result) {
+      const trip = await this.tripModel.findById(tripId).exec();
+      if (!trip) {
         throw new RpcException({
           statusCode: HttpStatus.NOT_FOUND,
           message: "Viagem não encontrada.",
         });
       }
-      return result;
+      return trip;
+    } catch (error) {
+      console.error(
+        "Erro ao chamar Google Routes API:",
+        error,
+      );
+
+      throw new RpcException({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: "Não foi possivel encontrar corrida.",
+      });
+    }
+  }
+
+  async findUserId(id: string): Promise<Trip[]> {
+    try {
+      const trips = await this.tripModel.find({
+        passengerId: id,
+        driverId: id,
+      }).exec();
+
+      return trips;
     } catch (error) {
       console.error(
         "Erro ao chamar Google Routes API:",
