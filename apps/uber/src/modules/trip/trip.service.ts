@@ -6,6 +6,7 @@ import { TRIP_PATTERNS } from "@app/common/modules/trip/trip.patterns";
 import { lastValueFrom } from "rxjs";
 import { EstimateTripResponse } from "@app/common/modules/trip/dto/estimate-trip.reponse";
 import { TripResponseDto } from "@app/common/modules/trip/dto/tripResponse.dto";
+import { TripStatusResponse } from "@app/common/modules/trip/dto/trip-status.response";
 
 @Injectable()
 export class TripService {
@@ -48,7 +49,7 @@ export class TripService {
     return await lastValueFrom(result);
   }
 
-  async cancel(tripId: string): Promise<boolean> {
+  async cancel(tripId: string): Promise<TripStatusResponse> {
     const result = this.tripClient.send(
       TRIP_PATTERNS.CANCEL,
       tripId,
@@ -71,6 +72,7 @@ export class TripService {
     );
     return await lastValueFrom(result);
   }
+
   async finish(tripId: string): Promise<boolean> {
     const result = this.tripClient.send(
       TRIP_PATTERNS.FINISH,

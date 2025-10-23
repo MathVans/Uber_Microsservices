@@ -11,6 +11,7 @@ import { ConfigService } from "@nestjs/config";
 import { firstValueFrom } from "rxjs";
 import { TripStatus } from "@app/common/shared/enum/trip-status.enum";
 import { TripResponseDto } from "@app/common/modules/trip/dto/tripResponse.dto";
+import { TripStatusResponse } from "@app/common/modules/trip/dto/trip-status.response";
 
 @Injectable()
 export class TripService {
@@ -130,7 +131,7 @@ export class TripService {
     }
   }
 
-  async cancel(tripId: string): Promise<boolean> {
+  async cancel(tripId: string): Promise<TripStatusResponse> {
     try {
       const updateData = {
         $set: {
@@ -147,7 +148,14 @@ export class TripService {
           message: "Viagem não encontrada.",
         });
       }
-      return !!trip;
+
+      const date = new Date(Date.now());
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: "Corrida cancelada com sucesso.",
+        date: date.toISOString(),
+      };
     } catch (error) {
       throw new RpcException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -156,7 +164,7 @@ export class TripService {
     }
   }
 
-  async accept(tripId: string): Promise<boolean> {
+  async accept(tripId: string): Promise<TripStatusResponse> {
     try {
       const oldTrip = await this.tripModel.findById(tripId);
       const updateData = {
@@ -175,7 +183,13 @@ export class TripService {
           message: "Viagem não encontrada.",
         });
       }
-      return !!trip;
+      const date = new Date(Date.now());
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: "Corrida foi aceita.",
+        date: date.toISOString(),
+      };
     } catch (error) {
       throw new RpcException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -184,7 +198,7 @@ export class TripService {
     }
   }
 
-  async start(tripId: string): Promise<boolean> {
+  async start(tripId: string): Promise<TripStatusResponse> {
     try {
       const updateData = {
         $set: {
@@ -201,7 +215,12 @@ export class TripService {
           message: "Viagem não encontrada.",
         });
       }
-      return !!trip;
+      const date = new Date(Date.now());
+      return {
+        statusCode: HttpStatus.OK,
+        message: "Corrida iniciada.",
+        date: date.toISOString(),
+      };
     } catch (error) {
       throw new RpcException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -209,7 +228,7 @@ export class TripService {
       });
     }
   }
-  async finish(tripId: string): Promise<boolean> {
+  async finish(tripId: string): Promise<TripStatusResponse> {
     try {
       const updateData = {
         $set: {
@@ -226,7 +245,13 @@ export class TripService {
           message: "Viagem não encontrada.",
         });
       }
-      return !!trip;
+
+      const date = new Date(Date.now());
+      return {
+        statusCode: HttpStatus.OK,
+        message: "Corrida finalizada com sucesso.",
+        date: date.toISOString(),
+      };
     } catch (error) {
       throw new RpcException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
