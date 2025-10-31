@@ -1,0 +1,34 @@
+meta {
+  name: trip/
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3000/trip
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/11.6.2
+}
+
+body:json {
+  {
+    "passengerId": "68fa7a61dc7fd44da810e7cc",
+    "startLocation": {
+      "type": "Point",
+      "coordinates": [-38.412748, -12.939633]
+    },
+    "endLocation": {
+      "type": "Point",
+      "coordinates": [-38.477316, -12.974565]
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+}

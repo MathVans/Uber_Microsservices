@@ -1,0 +1,26 @@
+meta {
+  name: trip/_1
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:3000/trip
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/11.6.2
+}
+
+body:json {
+  {
+  	"id": "68fa7a61dc7fd44da810e7cc"
+  }
+}
+
+settings {
+  encodeUrl: true
+}
