@@ -1,0 +1,27 @@
+meta {
+  name: auth/login
+  type: http
+  seq: 1
+}
+
+post {
+  url: localhost:3000/auth/login
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/11.6.1
+}
+
+body:json {
+  {
+  "email": "passenger@example.com",
+   "password":"Secure123@"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

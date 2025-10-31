@@ -1,0 +1,35 @@
+meta {
+  name: trip/estimate
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3000/trip/estimate
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/11.6.2
+}
+
+body:json {
+  {
+    "startLocation": {
+      "type": "Point",
+      "coordinates": [-38.412748, -12.939633]
+    },
+    "endLocation": {
+      "type": "Point",
+      "coordinates": [-38.477316, -12.974565]
+    },
+  	"type": "DRIVE"
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+}

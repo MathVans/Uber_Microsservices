@@ -19,6 +19,15 @@
         "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
     },
+    "matching": {
+      "type": "application",
+      "root": "apps/matching",
+      "entryFile": "main",
+      "sourceRoot": "apps/matching/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/matching/tsconfig.app.json"
+      }
+    },
     "trip": {
       "type": "application",
       "root": "apps/trip",

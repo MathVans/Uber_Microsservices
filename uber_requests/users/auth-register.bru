@@ -1,0 +1,29 @@
+meta {
+  name: auth/register
+  type: http
+  seq: 2
+}
+
+post {
+  url: localhost:3000/auth/register
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/11.6.1
+}
+
+body:json {
+  {
+      "name": "passenger",
+      "email": "passenger@example.com",
+      "password": "Secure123@",
+      "role": "rider"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

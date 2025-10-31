@@ -1,0 +1,20 @@
+meta {
+  name: users/:id
+  type: http
+  seq: 4
+}
+
+get {
+  url: localhost:3000/users
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/11.6.1
+}
+
+settings {
+  encodeUrl: true
+}

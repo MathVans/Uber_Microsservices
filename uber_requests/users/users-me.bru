@@ -1,0 +1,19 @@
+meta {
+  name: users/me
+  type: http
+  seq: 3
+}
+
+get {
+  url: localhost:3000/users/me
+  body: none
+  auth: none
+}
+
+headers {
+  User-Agent: insomnia/11.6.1
+}
+
+settings {
+  encodeUrl: true
+}
