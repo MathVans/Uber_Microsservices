@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import {Partitioners} from 'kafkajs'
 
 @Module({
   imports: [
@@ -7,7 +8,15 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       {
         name: 'DISPATCH_SERVICE',
         transport: Transport.KAFKA,
-        options: { client: { brokers: ['localhost:9002'] } },
+        options: {
+          client: {
+            clientId: 'trip-service',
+            brokers: ['localhost:9092'],
+          },
+          producer: {
+            allowAutoTopicCreation: true,
+          },
+        },
       },
     ]),
   ],
