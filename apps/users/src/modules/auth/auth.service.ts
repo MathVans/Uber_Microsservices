@@ -4,16 +4,16 @@ import {
   HttpStatus,
   Injectable,
   UnauthorizedException,
-} from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { User, UserDocument } from "../users/entities/user.entity";
-import { Model } from "mongoose";
-import { RegisterDto } from "@app/common/modules/auth/dto/register.dto";
-import { LoginDto } from "@app/common/modules/auth/dto/login.dto";
-import * as bcrypt from "bcrypt";
-import { JwtToken } from "@app/common/shared/interfaces/jwt-token.interface";
-import { JwtService } from "@nestjs/jwt";
-import { RpcException } from "@nestjs/microservices";
+} from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { User, UserDocument } from '../users/entities/user.entity';
+import { Model } from 'mongoose';
+import { RegisterDto } from '@app/common/modules/auth/dto/register.dto';
+import { LoginDto } from '@app/common/modules/auth/dto/login.dto';
+import * as bcrypt from 'bcrypt';
+import { JwtToken } from '@app/common/shared/interfaces/jwt-token.interface';
+import { JwtService } from '@nestjs/jwt';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class AuthService {
@@ -25,9 +25,7 @@ export class AuthService {
     const existingUser = await this.findByEmail(registerDto.email);
 
     if (existingUser) {
-      throw new RpcException(
-        new ConflictException("Usuário existente!"),
-      );
+      throw new RpcException(new ConflictException('Usuário existente!'));
     }
 
     const createdUser = await this.userModel.create({ ...registerDto });
@@ -54,13 +52,13 @@ export class AuthService {
   async login(loginData: LoginDto): Promise<JwtToken> {
     const user = await this.userModel
       .findOne({ email: loginData.email })
-      .select("+password")
+      .select('+password')
       .exec();
 
     if (!user || !user.password) {
       throw new RpcException({
         statusCode: HttpStatus.UNAUTHORIZED,
-        message: "Credenciais inválidas",
+        message: 'Credenciais inválidas',
       });
     }
 
@@ -72,7 +70,7 @@ export class AuthService {
     if (!isPasswordMatching) {
       throw new RpcException({
         statusCode: HttpStatus.UNAUTHORIZED,
-        message: "Credenciais inválidas",
+        message: 'Credenciais inválidas',
       });
     }
 

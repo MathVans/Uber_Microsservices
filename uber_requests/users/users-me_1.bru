@@ -5,7 +5,7 @@ meta {
 }
 
 patch {
-  url: localhost:3000/users/me
+  url: 0.0.0.0:3000/users/me
   body: none
   auth: none
 }
@@ -16,4 +16,5 @@ headers {
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

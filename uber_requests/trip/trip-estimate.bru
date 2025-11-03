@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: http://localhost:3000/trip/estimate
+  url: http://0.0.0.0:3000/trip/estimate
   body: json
   auth: none
 }
@@ -25,11 +25,12 @@ body:json {
       "type": "Point",
       "coordinates": [-38.477316, -12.974565]
     },
-  	"type": "DRIVE"
+    "type": "DRIVE"
   }
   
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

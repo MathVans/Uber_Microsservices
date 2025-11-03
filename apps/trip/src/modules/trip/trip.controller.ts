@@ -1,10 +1,10 @@
-import { Controller } from "@nestjs/common";
-import { MessagePattern, Payload } from "@nestjs/microservices";
-import { TripService } from "./trip.service";
+import { Controller } from '@nestjs/common';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { TripService } from './trip.service';
 
-import { TRIP_PATTERNS } from "@app/common/modules/trip/trip.patterns";
-import { EstimateTripDto } from "@app/common/modules/trip/dto/estimate-trip.dto";
-import { CreateTripDto } from "@app/common/modules/trip/dto/create-trip.dto";
+import { TRIP_PATTERNS } from '@app/common/modules/trip/trip.patterns';
+import { EstimateTripDto } from '@app/common/modules/trip/dto/estimate-trip.dto';
+import { CreateTripDto } from '@app/common/modules/trip/dto/create-trip.dto';
 
 @Controller()
 export class TripController {
@@ -48,5 +48,10 @@ export class TripController {
   @MessagePattern(TRIP_PATTERNS.FINISH)
   finish(@Payload() id: string) {
     return this.tripService.finish(id);
+  }
+
+  @MessagePattern(TRIP_PATTERNS.HEALTH)
+  health() {
+    return this.tripService.checkhealth();
   }
 }

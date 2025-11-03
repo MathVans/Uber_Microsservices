@@ -1,9 +1,9 @@
-import { HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
-import { UpdateUserDto } from "@app/common/modules/user/dto/update-user.dto";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { User, UserDocument } from "./entities/user.entity";
-import { RpcException } from "@nestjs/microservices";
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { UpdateUserDto } from '@app/common/modules/user/dto/update-user.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { User, UserDocument } from './entities/user.entity';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class UsersService {
@@ -16,7 +16,7 @@ export class UsersService {
       if (!user) {
         throw new RpcException({
           status: HttpStatus.NOT_FOUND,
-          message: "Usuário não encontrado",
+          message: 'Usuário não encontrado',
         });
       }
 
@@ -29,21 +29,17 @@ export class UsersService {
     }
   }
 
-  async update(
-    updateUserDto: UpdateUserDto,
-  ): Promise<User> {
+  async update(updateUserDto: UpdateUserDto): Promise<User> {
     try {
       const { id, ...data } = updateUserDto;
-      const updatedUser = await this.userModel.findByIdAndUpdate(
-        id,
-        data,
-        { new: true },
-      ).exec();
+      const updatedUser = await this.userModel
+        .findByIdAndUpdate(id, data, { new: true })
+        .exec();
 
       if (!updatedUser) {
         throw new RpcException({
           statusCode: HttpStatus.NOT_FOUND,
-          message: "Usuário não encontrado",
+          message: 'Usuário não encontrado',
         });
       }
 

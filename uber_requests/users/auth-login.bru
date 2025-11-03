@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: localhost:3000/auth/login
+  url: 0.0.0.0:3000/auth/login
   body: json
   auth: none
 }
@@ -24,4 +24,5 @@ body:json {
 
 settings {
   encodeUrl: true
+  timeout: 0
 }
