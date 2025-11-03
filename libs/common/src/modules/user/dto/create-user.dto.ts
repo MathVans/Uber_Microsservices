@@ -1,28 +1,28 @@
-import { Role } from "@app/common/shared/enum/role.enum";
+import { Role } from '@app/common/shared/enum/role.enum';
 import {
-    IsEmail,
-    IsEnum,
-    IsNotEmpty,
-    IsString,
-    IsStrongPassword,
-    MinLength,
-} from "class-validator";
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  IsStrongPassword,
+  MinLength,
+} from 'class-validator';
 
 export class CreateUserDto {
-    @IsString()
-    @IsNotEmpty()
-    @MinLength(2)
-    name: string;
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(2)
+  name: string;
 
-    @IsEmail()
-    @IsNotEmpty()
-    email: string;
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
 
-    @IsStrongPassword({
-        minLength: 6,
-    })
-    password: string;
+  @IsStrongPassword({
+    minLength: 6,
+  })
+  password: string;
 
-    @IsEnum(Role)
-    role: Role;
+  @IsEnum(Role)
+  role: Role;
 }

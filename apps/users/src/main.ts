@@ -1,11 +1,11 @@
-import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
 import {
   MicroserviceOptions,
   RpcException,
   Transport,
-} from "@nestjs/microservices";
-import { ValidationPipe } from "@nestjs/common";
+} from '@nestjs/microservices';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
