@@ -111,7 +111,7 @@ export class TripService {
   }
 
   async checkhealth(){
-    const result = this.dispatchClient.emit("Healthy Topic", "Is this healthy?")
+    const result = this.dispatchClient.emit("check.health", "Is this healthy?")
     console.log("🚀 ~ TripService ~ health ~ result:", result)
 
     return result;
