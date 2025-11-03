@@ -101,8 +101,6 @@ export class TripService {
         duration: route.duration,
       };
     } catch (error) {
-      console.error('Erro ao chamar Google Routes API:', error);
-
       throw new RpcException({
         statusCode: HttpStatus.BAD_GATEWAY,
         message: 'Não foi possível calcular a estimativa da rota.',
@@ -118,7 +116,6 @@ export class TripService {
   }
 
   async create(createTripDto: CreateTripDto): Promise<TripResponseDto> {
-    try {
       const { startLocation, endLocation } = createTripDto;
       const estimate = await this.estimate({ startLocation, endLocation });
       const trip = await this.tripModel.create({
@@ -134,16 +131,9 @@ export class TripService {
         `[TripService] Evento 'trip.requested' emitido para a corrida ${result.id}`,
       );
       return result;
-    } catch (error) {
-      throw new RpcException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Erro ao criar corrida.',
-      });
-    }
   }
 
   async cancel(tripId: string): Promise<TripStatusResponse> {
-    try {
       const updateData = {
         $set: {
           status: TripStatus.CANCELED,
@@ -168,21 +158,13 @@ export class TripService {
         message: 'Corrida cancelada com sucesso.',
         date: date.toISOString(),
       };
-    } catch (error) {
-      throw new RpcException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: error,
-      });
-    }
   }
 
+
   async accept(tripId: string): Promise<TripStatusResponse> {
-    try {
-      const oldTrip = await this.tripModel.findById(tripId);
       const updateData = {
         $set: {
           status: TripStatus.ACCEPTED,
-          finalPrice: oldTrip.estimatedPrice,
         },
       };
 
@@ -196,23 +178,17 @@ export class TripService {
           message: 'Viagem não encontrada.',
         });
       }
+
       const date = new Date(Date.now());
 
       return {
         statusCode: HttpStatus.OK,
-        message: 'Corrida foi aceita.',
+        message: 'Corrida aceita com sucesso.',
         date: date.toISOString(),
       };
-    } catch (error) {
-      throw new RpcException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: error,
-      });
-    }
   }
 
   async start(tripId: string): Promise<TripStatusResponse> {
-    try {
       const updateData = {
         $set: {
           status: TripStatus.IN_PROGRESS,
@@ -229,21 +205,16 @@ export class TripService {
           message: 'Viagem não encontrada.',
         });
       }
+
       const date = new Date(Date.now());
       return {
         statusCode: HttpStatus.OK,
         message: 'Corrida iniciada.',
         date: date.toISOString(),
       };
-    } catch (error) {
-      throw new RpcException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: error,
-      });
-    }
   }
+
   async finish(tripId: string): Promise<TripStatusResponse> {
-    try {
       const updateData = {
         $set: {
           status: TripStatus.COMPLETED,
@@ -267,16 +238,9 @@ export class TripService {
         message: 'Corrida finalizada com sucesso.',
         date: date.toISOString(),
       };
-    } catch (error) {
-      throw new RpcException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: error,
-      });
-    }
   }
 
   async findOne(tripId: string): Promise<TripResponseDto> {
-    try {
       const trip = await this.tripModel.findById(tripId).exec();
       if (!trip) {
         throw new RpcException({
@@ -285,14 +249,6 @@ export class TripService {
         });
       }
       return this.mapToResponseDto(trip);
-    } catch (error) {
-      console.error('Erro ao chamar Google Routes API:', error);
-
-      throw new RpcException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Não foi possivel encontrar corrida.',
-      });
-    }
   }
 
   async findUserId(id: string): Promise<TripResponseDto[]> {
@@ -305,7 +261,6 @@ export class TripService {
 
       return trips.map((trip) => this.mapToResponseDto(trip));
     } catch (error) {
-      console.error(`Erro ao buscar corridas para o usuário ID: ${id}`, error);
 
       throw new RpcException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
