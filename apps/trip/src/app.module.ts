@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env.trip' }),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: 'apps/trip/.env' }),
     MongooseModule.forRootAsync(mongoConfig),
     TripModule,
   ],
