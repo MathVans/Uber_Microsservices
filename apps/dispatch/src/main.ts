@@ -1,29 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import { AppModule } from './app.module';
-import { Partitioners } from 'kafkajs';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
-    {
-      transport: Transport.KAFKA,
-      options: {
-        client: {
-          clientId: 'DISPATCH_SERVICE',
-          brokers: ['localhost:9092'],
-          retry: {
-            initialRetryTime: 300,
-            retries: 10,
-          },
-        },
-        consumer: {
-          groupId: 'dispatch-consumer',
-          allowAutoTopicCreation: true, 
-        },
-      },
-    },
-  );
+  const app = await NestFactory.create(AppModule);
+
+  const configService = app.get(ConfigService);
+  const kafkaBrokerUrl = configService.get<string>('KAFKA_BROKER_URL');
 
   await app.listen();
   console.log('✅ Dispatch Service está escutando eventos Kafka...');

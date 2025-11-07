@@ -35,6 +35,8 @@ export class TripService {
   async estimate(
     estimateTripDto: EstimateTripDto,
   ): Promise<EstimateTripResponse> {
+
+    console.log(this.googleMapsApiKey, this.googleMapsApiUrl)
     const requestBody = {
       origins: [
         {
