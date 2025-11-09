@@ -4,13 +4,14 @@ import { DispatchController } from './dispatch.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
-  imports:[ClientsModule.register([
-    {
-      name: "DISPATCH_SERVICE",
-      transport: Transport.KAFKA,
-    }
-  ]
-  )],
+  imports: [
+    ClientsModule.register([
+      {
+        name: 'DISPATCH_SERVICE',
+        transport: Transport.KAFKA,
+      },
+    ]),
+  ],
   controllers: [DispatchController],
   providers: [DispatchService],
 })

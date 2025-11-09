@@ -31,7 +31,7 @@ export class TripController {
     return this.tripService.findByUser(idDto.id);
   }
 
-    @Get('/health')
+  @Get('/health')
   checkHealth() {
     return this.tripService.checkHealth();
   }

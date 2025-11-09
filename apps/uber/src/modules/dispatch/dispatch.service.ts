@@ -4,9 +4,7 @@ import { UpdateDispatchDto } from './dto/update-dispatch.dto';
 
 @Injectable()
 export class DispatchService {
-
-
-  checkHealthy(){}
+  checkHealthy() {}
 
   create(createDispatchDto: CreateDispatchDto) {
     return 'This action adds a new dispatch';

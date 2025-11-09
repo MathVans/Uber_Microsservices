@@ -35,8 +35,7 @@ export class TripService {
   async estimate(
     estimateTripDto: EstimateTripDto,
   ): Promise<EstimateTripResponse> {
-
-    console.log(this.googleMapsApiKey, this.googleMapsApiUrl)
+    console.log(this.googleMapsApiKey, this.googleMapsApiUrl);
     const requestBody = {
       origins: [
         {
@@ -110,147 +109,146 @@ export class TripService {
     }
   }
 
-  async checkhealth(){
-    const result = this.dispatchClient.emit("check.health", "Is this healthy?")
-    console.log("🚀 ~ TripService ~ health ~ result:", result)
+  async checkhealth() {
+    const result = this.dispatchClient.emit('check.health', 'Is this healthy?');
+    console.log('🚀 ~ TripService ~ health ~ result:', result);
 
     return result;
   }
 
   async create(createTripDto: CreateTripDto): Promise<TripResponseDto> {
-      const { startLocation, endLocation } = createTripDto;
-      const estimate = await this.estimate({ startLocation, endLocation });
-      const trip = await this.tripModel.create({
-        ...createTripDto,
-        status: 'requested',
-        estimatedPrice: estimate.estimatedPrice,
-      });
+    const { startLocation, endLocation } = createTripDto;
+    const estimate = await this.estimate({ startLocation, endLocation });
+    const trip = await this.tripModel.create({
+      ...createTripDto,
+      status: 'requested',
+      estimatedPrice: estimate.estimatedPrice,
+    });
 
-      const result = this.mapToResponseDto(trip);
+    const result = this.mapToResponseDto(trip);
 
-      this.dispatchClient.emit('trip.requested', result);
-      console.log(
-        `[TripService] Evento 'trip.requested' emitido para a corrida ${result.id}`,
-      );
-      return result;
+    this.dispatchClient.emit('trip.requested', result);
+    console.log(
+      `[TripService] Evento 'trip.requested' emitido para a corrida ${result.id}`,
+    );
+    return result;
   }
 
   async cancel(tripId: string): Promise<TripStatusResponse> {
-      const updateData = {
-        $set: {
-          status: TripStatus.CANCELED,
-        },
-      };
+    const updateData = {
+      $set: {
+        status: TripStatus.CANCELED,
+      },
+    };
 
-      const trip = await this.tripModel
-        .findByIdAndUpdate(tripId, updateData)
-        .exec();
+    const trip = await this.tripModel
+      .findByIdAndUpdate(tripId, updateData)
+      .exec();
 
-      if (!trip) {
-        throw new RpcException({
-          statusCode: HttpStatus.NOT_FOUND,
-          message: 'Viagem não encontrada.',
-        });
-      }
+    if (!trip) {
+      throw new RpcException({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Viagem não encontrada.',
+      });
+    }
 
-      const date = new Date(Date.now());
+    const date = new Date(Date.now());
 
-      return {
-        statusCode: HttpStatus.OK,
-        message: 'Corrida cancelada com sucesso.',
-        date: date.toISOString(),
-      };
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Corrida cancelada com sucesso.',
+      date: date.toISOString(),
+    };
   }
 
-
   async accept(tripId: string): Promise<TripStatusResponse> {
-      const updateData = {
-        $set: {
-          status: TripStatus.ACCEPTED,
-        },
-      };
+    const updateData = {
+      $set: {
+        status: TripStatus.ACCEPTED,
+      },
+    };
 
-      const trip = await this.tripModel
-        .findByIdAndUpdate(tripId, updateData)
-        .exec();
+    const trip = await this.tripModel
+      .findByIdAndUpdate(tripId, updateData)
+      .exec();
 
-      if (!trip) {
-        throw new RpcException({
-          statusCode: HttpStatus.NOT_FOUND,
-          message: 'Viagem não encontrada.',
-        });
-      }
+    if (!trip) {
+      throw new RpcException({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Viagem não encontrada.',
+      });
+    }
 
-      const date = new Date(Date.now());
+    const date = new Date(Date.now());
 
-      return {
-        statusCode: HttpStatus.OK,
-        message: 'Corrida aceita com sucesso.',
-        date: date.toISOString(),
-      };
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Corrida aceita com sucesso.',
+      date: date.toISOString(),
+    };
   }
 
   async start(tripId: string): Promise<TripStatusResponse> {
-      const updateData = {
-        $set: {
-          status: TripStatus.IN_PROGRESS,
-        },
-      };
+    const updateData = {
+      $set: {
+        status: TripStatus.IN_PROGRESS,
+      },
+    };
 
-      const trip = await this.tripModel
-        .findByIdAndUpdate(tripId, updateData)
-        .exec();
+    const trip = await this.tripModel
+      .findByIdAndUpdate(tripId, updateData)
+      .exec();
 
-      if (!trip) {
-        throw new RpcException({
-          statusCode: HttpStatus.NOT_FOUND,
-          message: 'Viagem não encontrada.',
-        });
-      }
+    if (!trip) {
+      throw new RpcException({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Viagem não encontrada.',
+      });
+    }
 
-      const date = new Date(Date.now());
-      return {
-        statusCode: HttpStatus.OK,
-        message: 'Corrida iniciada.',
-        date: date.toISOString(),
-      };
+    const date = new Date(Date.now());
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Corrida iniciada.',
+      date: date.toISOString(),
+    };
   }
 
   async finish(tripId: string): Promise<TripStatusResponse> {
-      const updateData = {
-        $set: {
-          status: TripStatus.COMPLETED,
-        },
-      };
+    const updateData = {
+      $set: {
+        status: TripStatus.COMPLETED,
+      },
+    };
 
-      const trip = await this.tripModel
-        .findByIdAndUpdate(tripId, updateData)
-        .exec();
+    const trip = await this.tripModel
+      .findByIdAndUpdate(tripId, updateData)
+      .exec();
 
-      if (!trip) {
-        throw new RpcException({
-          statusCode: HttpStatus.NOT_FOUND,
-          message: 'Viagem não encontrada.',
-        });
-      }
+    if (!trip) {
+      throw new RpcException({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Viagem não encontrada.',
+      });
+    }
 
-      const date = new Date(Date.now());
-      return {
-        statusCode: HttpStatus.OK,
-        message: 'Corrida finalizada com sucesso.',
-        date: date.toISOString(),
-      };
+    const date = new Date(Date.now());
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Corrida finalizada com sucesso.',
+      date: date.toISOString(),
+    };
   }
 
   async findOne(tripId: string): Promise<TripResponseDto> {
-      const trip = await this.tripModel.findById(tripId).exec();
-      if (!trip) {
-        throw new RpcException({
-          statusCode: HttpStatus.NOT_FOUND,
-          message: 'Viagem não encontrada.',
-        });
-      }
-      return this.mapToResponseDto(trip);
+    const trip = await this.tripModel.findById(tripId).exec();
+    if (!trip) {
+      throw new RpcException({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Viagem não encontrada.',
+      });
+    }
+    return this.mapToResponseDto(trip);
   }
 
   async findUserId(id: string): Promise<TripResponseDto[]> {
@@ -263,7 +261,6 @@ export class TripService {
 
       return trips.map((trip) => this.mapToResponseDto(trip));
     } catch (error) {
-
       throw new RpcException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'Não foi possivel encontrar corrida.',
