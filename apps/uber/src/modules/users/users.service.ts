@@ -9,10 +9,25 @@ import { ClientProxy } from '@nestjs/microservices';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { lastValueFrom } from 'rxjs';
 import { USERS_PATTERNS } from '@app/common/modules/user/users.patterns';
+import { RegisterDto } from '@app/common/modules/auth/dto/register.dto';
+import { LoginDto } from '@app/common/modules/auth/dto/login.dto';
+import { AUTH_PATTERNS } from '@app/common/modules/auth/auth.patterns';
 
 @Injectable()
 export class UsersService {
   constructor(@Inject('USERS_CLIENT') private userClient: ClientProxy) {}
+
+  async register(registerDto: RegisterDto) {
+    const observable = await this.userClient.send(
+      AUTH_PATTERNS.REGISTER,
+      registerDto,
+    );
+    return lastValueFrom(observable);
+  }
+
+  async login(loginDto: LoginDto) {
+    return await this.userClient.send(AUTH_PATTERNS.LOGIN, loginDto);
+  }
   findOne(id: string) {
     return this.userClient.send(USERS_PATTERNS.FIND_ONE, id);
   }

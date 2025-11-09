@@ -6,6 +6,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { TripModule } from './modules/trip/trip.module';
 import { DispatchModule } from './modules/dispatch/dispatch.module';
 import { ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [

@@ -10,7 +10,7 @@ import {
 import { TripService } from './trip.service';
 import { CreateTripDto } from '@app/common/modules/trip/dto/create-trip.dto';
 import { EstimateTripDto } from '@app/common/modules/trip/dto/estimate-trip.dto';
-import { IdDto } from '../../shared/common/dto/Id-dto';
+import { IdDto } from '@app/common/shared/dto/idDto.dto';
 
 @Controller('trip')
 export class TripController {
