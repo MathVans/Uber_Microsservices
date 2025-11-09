@@ -12,8 +12,8 @@ import { TripStatusResponse } from '@app/common/modules/trip/dto/trip-status.res
 export class TripService {
   constructor(@Inject('TRIP_CLIENT') private tripClient: ClientProxy) {}
 
-  async checkHealth(){
-    this.tripClient.emit(TRIP_PATTERNS.HEALTH, {})
+  async checkHealth() {
+    this.tripClient.emit(TRIP_PATTERNS.HEALTH, {});
   }
 
   async estimate(

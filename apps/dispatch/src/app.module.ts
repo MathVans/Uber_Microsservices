@@ -5,12 +5,13 @@ import { MatchingModule } from './modules/matching/matching.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [ConfigModule.forRoot({
-    isGlobal: true,
-    envFilePath:"apps/dispatch/.env"
-  }),
-  MatchingModule
-],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: 'apps/dispatch/.env',
+    }),
+    MatchingModule,
+  ],
   controllers: [MatchingController],
   providers: [MatchingService],
 })
