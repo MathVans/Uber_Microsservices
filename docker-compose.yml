@@ -18,12 +18,12 @@ services:
       - mongo-data:/data/db
     networks:
       - uber-network
+
   broker:
     image: apache/kafka:latest
     container_name: broker
     ports:
       - '9092:9092'
-
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
@@ -31,10 +31,8 @@ services:
       KAFKA_ADVERTISED_LISTENERS: INTERNAL://broker:29092,EXTERNAL://localhost:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@broker:9093
-
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
@@ -42,14 +40,98 @@ services:
       - uber-network
 
   kafka-ui:
-    container_name: kafka-ui
     image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
     ports:
-      - 8080:8080
+      - '8080:8080'
+    depends_on:
+      - broker
     environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: broker:29092
       DYNAMIC_CONFIG_ENABLED: 'true'
     networks:
       - uber-network
+
+  uber:
+    image: node:22-alpine
+    container_name: uber-api-gateway
+    working_dir: /usr/src/app
+    command: sh -c "npm install && npx nest start uber --watch"
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - uber-network
+    depends_on:
+      - mongodb
+      - broker
+      - users
+      - trip
+      - dispatch
+
+  users:
+    image: node:22-alpine
+    container_name: uber-users-service
+    working_dir: /usr/src/app
+    command: sh -c "npm install && npx nest start users --watch"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - uber-network
+    depends_on:
+      - mongodb
+      - broker
+    environment:
+      - MONGO_URL=mongodb://root:root@localhost:27017/
+      - MONGO_DB=uber_users_dev
+      - JWT_SECRET=supersecret
+      - PORT=3000
+
+  trip:
+    image: node:22-alpine
+    container_name: uber-trip-service
+    working_dir: /usr/src/app
+    command: sh -c "npm install && npx nest start trip --watch"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - uber-network
+    depends_on:
+      - mongodb
+      - broker
+    environment:
+      - MONGO_URL=mongodb://root:root@mongodb:27017/
+      - MONGO_DB=uber_trip_dev
+      - PORT=3000
+      - KAFKA_BROKER_URL=broker:29092
+      - KAFKA_CONSUMER_GROUP=trip_consumer
+      - KAFKA_CLIENT_ID=trip
+      - GOOGLE_MAPS_API_KEY=
+      - GOOGLE_MAPS_API_URL=https://routes.googleapis.com/distanceMatrix/v2:computeRouteMatrix
+
+  dispatch:
+    image: node:22-alpine
+    container_name: uber-dispatch-service
+    working_dir: /usr/src/app
+    command: sh -c "npm install && npx nest start dispatch --watch"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - uber-network
+    depends_on:
+      - mongodb
+      - broker
+    environment:
+      - PORT=3000
+      - KAFKA_BROKER_URL=broker:29092
+      - KAFKA_CONSUMER_GROUP=dispatch_consumer
+      - KAFKA_CLIENT_ID=dispatch
 
 volumes:
   mongo-data:
