@@ -1,0 +1,34 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Microservice Users",
+            "type": "shell",
+            "command": "nest start --watch users",
+            "problemMatcher": [],
+            "presentation": {
+                "panel": "new"
+            }
+        },
+        {
+            "label": "Microservice Trip",
+            "type": "shell",
+            "command": "nest start --watch trip",
+            "problemMatcher": [],
+            "presentation": {
+                "panel": "new"
+            }
+        },
+        {
+            "label": "Microservice Uber",
+            "type": "shell",
+            "command": "nest start --watch uber",
+            "problemMatcher": [],
+            "presentation": {
+                "panel": "new"
+            }
+        },
+        {
+            "label": "start All",
+            "dependsOn": ["Microservice Users", "Microservice Trip", "Microservice Uber"],
+            "dependsOrder": "parallel", "group": {"kind":"build"} } ] }
