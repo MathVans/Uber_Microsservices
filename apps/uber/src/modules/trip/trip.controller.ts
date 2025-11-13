@@ -1,17 +1,18 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
-  Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { TripService } from './trip.service';
 import { CreateTripDto } from '@app/common/modules/trip/dto/create-trip.dto';
 import { EstimateTripDto } from '@app/common/modules/trip/dto/estimate-trip.dto';
 import { IdDto } from '@app/common/shared/dto/idDto.dto';
+import { GatewayAuthGuard } from '../../shared/guards/gateway.auth.guard';
 
+@UseGuards(GatewayAuthGuard)
 @Controller('trip')
 export class TripController {
   constructor(private readonly tripService: TripService) {}

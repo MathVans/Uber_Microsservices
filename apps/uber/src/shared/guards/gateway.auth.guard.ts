@@ -10,9 +10,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class GatewayAuthGuard implements CanActivate {
   constructor(private readonly jwtService: JwtService) {}
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
     const { authorization } = request.headers;
 
@@ -23,17 +21,13 @@ export class GatewayAuthGuard implements CanActivate {
     const token = authorization.split(' ')[1];
 
     try {
-      const payload = this.jwtService.verify(token, {
-        secret: process.env.JWT_SECRET,
-      });
-
+      const payload = this.jwtService.verify(token);
       request.headers['X_User_Id'] = payload.id;
       request.headers['X_User_Role'] = payload.role;
       request.headers['X_User_Email'] = payload.email;
-
       return true;
     } catch (error) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException(error);
     }
   }
 }
