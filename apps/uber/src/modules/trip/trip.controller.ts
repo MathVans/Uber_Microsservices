@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { TripService } from './trip.service';
 import { CreateTripDto } from '@app/common/modules/trip/dto/create-trip.dto';
 import { EstimateTripDto } from '@app/common/modules/trip/dto/estimate-trip.dto';

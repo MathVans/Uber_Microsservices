@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { GlobalJwtModule } from '@app/common/modules/auth/jwt.module';
 
 @Module({
-  imports: [    
+  imports: [
     ClientsModule.register([
       {
         name: 'USERS_CLIENT',
@@ -13,8 +13,9 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         options: { port: 3001 },
       },
     ]),
-  JwtModule.register({ secret: process.env.JWT_SECRET })],
-  controllers:[AuthController],
+    GlobalJwtModule,
+  ],
+  controllers: [AuthController],
   providers: [AuthService],
 })
 export class AuthModule {}

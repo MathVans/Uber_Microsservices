@@ -25,7 +25,10 @@ export class AuthService {
     const existingUser = await this.findByEmail(registerDto.email);
 
     if (existingUser) {
-      throw new RpcException(new ConflictException('Usuário existente!'));
+      throw new RpcException({
+        statusCode: HttpStatus.CONFLICT,
+        message: 'Credenciais inválidas',
+      });
     }
 
     const createdUser = await this.userModel.create({ ...registerDto });
