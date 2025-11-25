@@ -5,7 +5,7 @@ import { Role } from '@app/common/shared/enum/role.enum';
 
 describe('AuthController', () => {
   let controller: AuthController;
-
+  let service: AuthService;
   const mockAuthService = {
     register: jest.fn((dto) => {
       return {
@@ -25,6 +25,7 @@ describe('AuthController', () => {
       .compile();
 
     controller = module.get<AuthController>(AuthController);
+    service = module.get<AuthService>(AuthService);
   });
 
   it('should be defined', () => {
@@ -62,6 +63,5 @@ describe('AuthController', () => {
     expect(result).toEqual(expectedResult);
 
     expect(service.login).toHaveBeenCalledWith(loginDto);
-    
   });
 });
