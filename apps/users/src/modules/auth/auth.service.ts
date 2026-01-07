@@ -27,7 +27,7 @@ export class AuthService {
     if (existingUser) {
       throw new RpcException({
         statusCode: HttpStatus.CONFLICT,
-        message: 'Credenciais inválidas',
+        message: "User Already Exist's",
       });
     }
 
