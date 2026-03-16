@@ -6,6 +6,7 @@ import { TripModule } from './modules/trip/trip.module';
 import { DispatchModule } from './modules/dispatch/dispatch.module';
 import { ConfigModule } from '@nestjs/config';
 import { GlobalJwtModule } from '@app/common/modules/auth/jwt.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { GlobalJwtModule } from '@app/common/modules/auth/jwt.module';
     UsersModule,
     TripModule,
     DispatchModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
