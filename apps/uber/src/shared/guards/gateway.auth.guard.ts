@@ -5,7 +5,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Observable } from 'rxjs';
 
 @Injectable()
 export class GatewayAuthGuard implements CanActivate {
@@ -21,7 +20,9 @@ export class GatewayAuthGuard implements CanActivate {
     const token = authorization.split(' ')[1];
 
     try {
-      const payload = this.jwtService.verify(token);
+      const payload = this.jwtService.verify(token, {
+        secret: process.env.JWT_SECRET || 'Secret',
+      });
       request.headers['X_User_Id'] = payload.id;
       request.headers['X_User_Role'] = payload.role;
       request.headers['X_User_Email'] = payload.email;

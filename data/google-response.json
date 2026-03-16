@@ -1,0 +1,473 @@
+{
+  "geocoded_waypoints": [
+    {
+      "geocoder_status": "OK",
+      "place_id": "ChIJodG-AU4XFgcRRej3oqAD4cI",
+      "types": ["establishment", "point_of_interest", "shopping_mall"]
+    },
+    {
+      "geocoder_status": "OK",
+      "partial_match": true,
+      "place_id": "ChIJb5S_WxsTFgcRR_vjzkuzKTM",
+      "types": [
+        "establishment",
+        "food",
+        "grocery_or_supermarket",
+        "point_of_interest",
+        "store"
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "bounds": {
+        "northeast": {
+          "lat": -12.8468795,
+          "lng": -38.381041
+        },
+        "southwest": {
+          "lat": -12.9358715,
+          "lng": -38.4567145
+        }
+      },
+      "copyrights": "Powered by Google, ©2026 Google",
+      "legs": [
+        {
+          "distance": {
+            "text": "16.4 km",
+            "value": 16440
+          },
+          "duration": {
+            "text": "23 mins",
+            "value": 1352
+          },
+          "end_address": "BA-528 - Estrada - Naval de Aratu, s/n - Valéria, Salvador - BA, 40731, Brazil",
+          "end_location": {
+            "lat": -12.8468795,
+            "lng": -38.4561056
+          },
+          "start_address": "Shopping Paralela - Av. Luís Viana Filho, 8544 - Alphaville, Salvador - BA, 41730-101, Brazil",
+          "start_location": {
+            "lat": -12.9358715,
+            "lng": -38.3950604
+          },
+          "steps": [
+            {
+              "distance": {
+                "text": "65 m",
+                "value": 65
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 23
+              },
+              "end_location": {
+                "lat": -12.9355307,
+                "lng": -38.3945778
+              },
+              "html_instructions": "Head <b>northeast</b> toward <b>Av. Luís Viana Filho</b>/<wbr/><b>Av. Paralela</b>",
+              "polyline": {
+                "points": "dp}mAb`jiFcA_B"
+              },
+              "start_location": {
+                "lat": -12.9358715,
+                "lng": -38.3950604
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "70 m",
+                "value": 70
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 25
+              },
+              "end_location": {
+                "lat": -12.9350347,
+                "lng": -38.3941986
+              },
+              "html_instructions": "Continue straight",
+              "maneuver": "straight",
+              "polyline": {
+                "points": "`n}mAb}iiFEGGIEEEEGEGEIGGEOGCASI"
+              },
+              "start_location": {
+                "lat": -12.9355307,
+                "lng": -38.3945778
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.8 km",
+                "value": 773
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 76
+              },
+              "end_location": {
+                "lat": -12.9306041,
+                "lng": -38.3887045
+              },
+              "html_instructions": "Merge onto <b>Av. Luís Viana Filho</b>/<wbr/><b>Av. Paralela</b>",
+              "maneuver": "merge",
+              "polyline": {
+                "points": "|j}mAvziiFa@e@]g@OW_@c@Ye@AEi@q@EEs@aAKOIKSYQUSWCE_@g@_@g@i@s@W[_AkAc@i@g@g@KMUYQU[c@]e@MQEGo@_A_@g@a@o@MSa@e@"
+              },
+              "start_location": {
+                "lat": -12.9350347,
+                "lng": -38.3941986
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.7 km",
+                "value": 686
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 47
+              },
+              "end_location": {
+                "lat": -12.9269923,
+                "lng": -38.3836064
+              },
+              "html_instructions": "Continue onto <b>Marginal da Avenida Luís Viana Filho</b>",
+              "polyline": {
+                "points": "fo|mAjxhiFGIKKqAeBKMKMgB_C[a@s@aAU[m@y@cAsAWa@EEU[o@eAW[S]Q_@O[a@eASi@_@kAKW"
+              },
+              "start_location": {
+                "lat": -12.9306041,
+                "lng": -38.3887045
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.2 km",
+                "value": 211
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 17
+              },
+              "end_location": {
+                "lat": -12.9263818,
+                "lng": -38.3817637
+              },
+              "html_instructions": "Keep <b>left</b> to stay on <b>Marginal da Avenida Luís Viana Filho</b>, follow signs for <b>Aeroporto</b>",
+              "maneuver": "keep-left",
+              "polyline": {
+                "points": "tx{mApxgiFy@iCQ}@[iBQ_A"
+              },
+              "start_location": {
+                "lat": -12.9269923,
+                "lng": -38.3836064
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.2 km",
+                "value": 235
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 23
+              },
+              "end_location": {
+                "lat": -12.9266497,
+                "lng": -38.3817822
+              },
+              "html_instructions": "Take the ramp to <b>Rodoviária</b>",
+              "maneuver": "ramp-right",
+              "polyline": {
+                "points": "zt{mA~lgiF?w@?W@O?CBGBIDEDEBCHEFAFAF?N@L@D@FBH@HHFFDHDL?NAHADADEHEDMFy@^"
+              },
+              "start_location": {
+                "lat": -12.9263818,
+                "lng": -38.3817637
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.2 km",
+                "value": 223
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 17
+              },
+              "end_location": {
+                "lat": -12.9247538,
+                "lng": -38.3824482
+              },
+              "html_instructions": "Merge onto <b>Av. Orlando Gomes</b>",
+              "maneuver": "merge",
+              "polyline": {
+                "points": "pv{mAbmgiFa@JODQDa@HQDQDSD[HcAVC@cAXa@JSF"
+              },
+              "start_location": {
+                "lat": -12.9266497,
+                "lng": -38.3817822
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "1.6 km",
+                "value": 1586
+              },
+              "duration": {
+                "text": "2 mins",
+                "value": 92
+              },
+              "end_location": {
+                "lat": -12.9192639,
+                "lng": -38.393615
+              },
+              "html_instructions": "Continue straight onto <b>Av. 29 de Março</b>",
+              "maneuver": "straight",
+              "polyline": {
+                "points": "tj{mAhqgiFwHjBUF}@V_Bd@o@PkA^SFa@NGBWHYLSHQJUNWVMNWZQXMVKTQb@IZGVCTATCX?\\@l@?FBZF`@R|@Rj@JZPn@DPDX@R?T?d@?ZAVAVCxAExBCtAA~@CjE?D@h@?ZC`@C\\Eb@G^CNEPKZGPGPUd@KRGLOTIJMRQRUXIHi@`@"
+              },
+              "start_location": {
+                "lat": -12.9247538,
+                "lng": -38.3824482
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "90 m",
+                "value": 90
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 5
+              },
+              "end_location": {
+                "lat": -12.9185896,
+                "lng": -38.3940698
+              },
+              "html_instructions": "Continue straight to stay on <b>Av. 29 de Março</b>",
+              "maneuver": "straight",
+              "polyline": {
+                "points": "jhzmA`wiiFOLUNQJi@Vc@X"
+              },
+              "start_location": {
+                "lat": -12.9192639,
+                "lng": -38.393615
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "3.5 km",
+                "value": 3468
+              },
+              "duration": {
+                "text": "3 mins",
+                "value": 205
+              },
+              "end_location": {
+                "lat": -12.9035521,
+                "lng": -38.4205797
+              },
+              "html_instructions": "Continue straight to stay on <b>Av. 29 de Março</b>",
+              "maneuver": "straight",
+              "polyline": {
+                "points": "ddzmA|yiiF{Ax@}Az@]RYR[VMJ_@b@]^SVQXGL]p@[p@Ob@IXI^I`@G\\E\\Gh@Eh@Gt@Gb@Kz@Kt@O~@S|@Sr@Qj@g@`Bi@dBIV]dAQf@Wv@GTs@lB{@xBKZM`@M`@[bAIXWnAEPIt@CNKhACv@Cf@?`@?L@rADn@Bd@@fA@h@C|@Ap@AXGl@M~@YdAm@jBGP[l@iA~BKRYf@o@jAEJQ\\U`@Wb@y@pAY\\o@p@CBgB|AYVEBqAp@u@`@gAf@cBp@cAd@g@`@]\\A@GHSRg@t@OZs@`BO^Q^ADKVo@vAk@rAc@z@k@z@QRe@h@YZo@r@}@`AKLgAvAi@v@y@lAOTi@|@SZ[f@KNU`@"
+              },
+              "start_location": {
+                "lat": -12.9185896,
+                "lng": -38.3940698
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.9 km",
+                "value": 932
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 78
+              },
+              "end_location": {
+                "lat": -12.8995919,
+                "lng": -38.4267552
+              },
+              "html_instructions": "Continue onto <b>Via Regional</b>",
+              "polyline": {
+                "points": "dfwmAr_oiFq@zAc@t@_Az@s@Zu@PIBw@Hm@Fq@FI@y@H[F]Fc@JOHSL_@TWRUT[`@S^A@MTAFEFIVCJEPGTCRATAL?LC~A?b@?d@?TB`A@T?L@TDnB@|@?j@AX?L"
+              },
+              "start_location": {
+                "lat": -12.9035521,
+                "lng": -38.4205797
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "1.9 km",
+                "value": 1868
+              },
+              "duration": {
+                "text": "2 mins",
+                "value": 139
+              },
+              "end_location": {
+                "lat": -12.8968845,
+                "lng": -38.4417604
+              },
+              "html_instructions": "Keep <b>left</b> to stay on <b>Via Regional</b>",
+              "maneuver": "keep-left",
+              "polyline": {
+                "points": "lmvmAffpiFCjA?lAC^ANCLCLGPK\\ENGNMZMXSb@]v@_@~@CHERG\\En@Cj@Bn@?NJj@DRJZVb@@DHJT\\\\d@JLb@d@LRb@l@NTP^L^FZFr@@b@?PChAKfBKzBQfDARGfAEp@I`BMpCAb@E|@ErAGhAEbACR?JANCXAXCLATCRK`@Mb@Qb@M\\CDCHSZMRe@d@g@b@c@T]LmA`@u@JS@[Bc@Di@F"
+              },
+              "start_location": {
+                "lat": -12.8995919,
+                "lng": -38.4267552
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.7 km",
+                "value": 669
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 62
+              },
+              "end_location": {
+                "lat": -12.8914165,
+                "lng": -38.4433434
+              },
+              "html_instructions": "Continue straight to stay on <b>Via Regional</b>",
+              "maneuver": "straight",
+              "polyline": {
+                "points": "n|umA~csiF_ADo@DWDyAVk@Vi@Tk@`@k@`@MJGHKLGF]^QL[Xa@Xo@^C@a@Je@Hg@DU?U?Q?g@Cm@Eq@Mc@GWCC?SEm@Ce@@I?"
+              },
+              "start_location": {
+                "lat": -12.8968845,
+                "lng": -38.4417604
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.1 km",
+                "value": 124
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 11
+              },
+              "end_location": {
+                "lat": -12.8903876,
+                "lng": -38.4437613
+              },
+              "html_instructions": "Continue straight onto <b>R. Avani Piton</b>/<wbr/><b>Via Regional</b>",
+              "maneuver": "straight",
+              "polyline": {
+                "points": "jztmAzmsiF]D[HA?a@LMFYL[LMF]H"
+              },
+              "start_location": {
+                "lat": -12.8914165,
+                "lng": -38.4433434
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "3.2 km",
+                "value": 3215
+              },
+              "duration": {
+                "text": "5 mins",
+                "value": 272
+              },
+              "end_location": {
+                "lat": -12.8646312,
+                "lng": -38.4499331
+              },
+              "html_instructions": "Continue onto <b>Est. do Derba</b>",
+              "polyline": {
+                "points": "|stmAnpsiFIDA@IFGBQJa@Ta@P[L]JkA\\c@JGAG?OBk@D_@B]?QAaBOwBOk@E{@Ey@GiAK}BUi@Im@Gy@I_AICAW@i@GYEsC]EA{ASqBQ[Eo@Ia@EMCu@IWEu@GE?c@I[E_AMYEOAQCg@I[EWCgBQe@EA?qPqBUCaAGEAw@?mAFc@DSBO@UD_@JoAXKDWLYJm@Zg@Xm@^}KlHSNsA|@gDxB]TcAp@a@XA?}EjDg@ZgC~A{@j@o@d@k@j@e@n@MRGLU^[h@w@`Be@fAMX"
+              },
+              "start_location": {
+                "lat": -12.8903876,
+                "lng": -38.4437613
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.7 km",
+                "value": 675
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 57
+              },
+              "end_location": {
+                "lat": -12.8598984,
+                "lng": -38.4532119
+              },
+              "html_instructions": "Slight <b>right</b>",
+              "maneuver": "turn-slight-right",
+              "polyline": {
+                "points": "|romA`wtiFG@C@ABCBEFEJKNADQT[Zk@f@[NMFOJa@Lm@L_@Fi@DA@s@Bq@@_@B[BMBSBSFUJWNURKLMRQb@EFKVKZGNITKZOXKHIJUPCBQLSJOHOFQHE@UFKBGBEBABAB?B"
+              },
+              "start_location": {
+                "lat": -12.8646312,
+                "lng": -38.4499331
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "1.6 km",
+                "value": 1550
+              },
+              "duration": {
+                "text": "3 mins",
+                "value": 203
+              },
+              "end_location": {
+                "lat": -12.8468795,
+                "lng": -38.4561056
+              },
+              "html_instructions": "Merge onto <b>Est. do Derba</b><div style=\"font-size:0.9em\">Destination will be on the right</div>",
+              "maneuver": "merge",
+              "polyline": {
+                "points": "junmApkuiFUDqA^mBf@e@LiBh@uA^s@Vm@Vi@To@Xe@TsDxBi@\\[ReBjAOFMDo@^UJg@VSHWJMDQFWFg@Jk@H}@Js@Dk@@c@@[A_@EYCk@Gm@I[C{@K_AK}@IGAuDe@{BUYEgAIa@KY?U@U@Y@_@D_@DcAP"
+              },
+              "start_location": {
+                "lat": -12.8598984,
+                "lng": -38.4532119
+              },
+              "travel_mode": "DRIVING"
+            }
+          ],
+          "traffic_speed_entry": [],
+          "via_waypoint": []
+        }
+      ],
+      "overview_polyline": {
+        "points": "dp}mAb`jiFwAwB_@Yo@Y_AmAo@{@kAcB}AwBiA{AaDcEmByByAqBwB_DcAoAeJ{LwBwCgAaBe@}@q@aBs@uBeAaDm@gDQ_A?w@@g@L[RONCV@d@HPPJVAXCJKNgAf@eB`@sAZmD~@kIrBsA^oF~A{Aj@e@Tm@f@e@j@_@p@]x@Qr@Ej@Cv@@t@J|@R|@Rj@\\jAJj@@h@CpBOhJAvGG~@MbA]nAq@xAy@hA_@b@y@n@g@ZmAp@yDtBw@f@i@b@}@bAe@p@e@~@k@tASx@Q~@MfAa@~D[tBg@pBmBjGoAzDiCdHi@dBa@hBOfAOxAGnCFbCDlBAfBCjAGl@M~@YdAu@|BeBlD{ArCg@~@qAtBiAnAkB`B_@ZgCrAkDxAcAd@g@`@_@^[\\g@t@OZcA`CoAtCoAnC}@nAmDzDsAdBcBdCiBvCa@p@q@zAc@t@_Az@s@Z_ATaDZuAPaARc@Vw@h@q@v@U`@_@|@UfAGpCB`DHhD?pCCxCEn@[jAi@tAq@zAc@hAMp@IzAB~@P~@b@~@JPr@bAn@r@`AvA^~@NnA@t@OpDg@~J_@hISzEKrBKvAOt@_@fAi@hAs@x@g@b@c@TkBn@iAL_AHi@F_ADgAJyAVk@Vi@Tk@`@y@l@[^o@l@}@r@s@`@gAT}@Dg@?uAIuAU}AMo@@y@Nc@Lg@TqAd@e@XcAf@y@XoBh@OA{@H}@BwGg@uBMgEa@qEe@[?cAMyC_@mEe@{BYiCW_Gy@gD[gQuBgAIw@?mAFw@HuCl@kBz@uAx@qL|H}I~FiH`FcEjCo@d@k@j@s@bA]l@sAjCs@`BKBEFYh@m@p@k@f@[N]RoAZiALu@DqADi@Fg@Jm@Za@`@_@v@e@jAUp@[b@u@n@eAf@o@PIN{FzA_EhAaBn@yAn@yEnCeAp@uBrA{BhAkAb@_ARiBT_BF_A?sC[uEe@sIcAgAIa@Ko@@o@B_AJcAP"
+      },
+      "summary": "Av. 29 de Março and Est. do Derba",
+      "warnings": [],
+      "waypoint_order": []
+    }
+  ],
+  "status": "OK"
+}

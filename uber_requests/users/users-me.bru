@@ -5,18 +5,18 @@ meta {
 }
 
 get {
-  url: 0.0.0.0:3000/users/me
+  url: http://localhost:3000/{{prefix}}/users/me
   body: json
   auth: none
 }
 
 headers {
-  User-Agent: insomnia/11.6.1
+  authorization: Bearer {{token}}
 }
 
 body:json {
   {
-  "id":"6904d30234d6cc1f8fe9c0e1"
+  "id":"69b7f24370205219b94725aa"
   }
 }
 

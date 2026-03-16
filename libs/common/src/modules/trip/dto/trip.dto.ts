@@ -8,7 +8,6 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { PointDto } from './point.dto';
 import { TripStatus } from '@app/common/shared/enum/trip-status.enum';
 
 export class TripDto {
@@ -21,14 +20,12 @@ export class TripDto {
   driverId: string;
 
   @ValidateNested()
-  @Type(() => PointDto)
   @IsNotEmpty()
-  startLocation: PointDto;
+  origin: String;
 
   @ValidateNested()
-  @Type(() => PointDto)
   @IsNotEmpty()
-  endLocation: PointDto;
+  destination: String;
 
   @IsEnum(TripStatus)
   @IsNotEmpty()

@@ -7,10 +7,11 @@ import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { EstimateTripDto } from '@app/common/modules/trip/dto/estimate-trip.dto';
 import { EstimateTripResponse } from '@app/common/modules/trip/dto/estimate-trip.reponse';
 import { HttpService } from '@nestjs/axios';
+import { AxiosError, isAxiosError } from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import { TripStatus } from '@app/common/shared/enum/trip-status.enum';
-import { TripResponseDto } from '@app/common/modules/trip/dto/tripResponse.dto';
+import { TripResponse } from '@app/common/modules/trip/dto/trip.response';
 import { TripStatusResponse } from '@app/common/modules/trip/dto/trip-status.response';
 
 @Injectable()
@@ -29,100 +30,82 @@ export class TripService {
       this.configService.get<string>('GOOGLE_MAPS_API_KEY') || 'your-api-key';
 
     this.googleMapsApiUrl =
-      this.configService.get<string>('GOOGLE_MAPS_API_URL') || 'your-api-key';
+      this.configService.get<string>('GOOGLE_MAPS_API_URL') || 'your-api-url';
+  }
+
+  async checkhealth() {
+    const result = this.dispatchClient.emit('check.health', 'Is this healthy?');
+    return result;
   }
 
   async estimate(
     estimateTripDto: EstimateTripDto,
   ): Promise<EstimateTripResponse> {
-    console.log(this.googleMapsApiKey, this.googleMapsApiUrl);
-    const requestBody = {
-      origins: [
-        {
-          waypoint: {
-            location: {
-              latLng: {
-                latitude: estimateTripDto.startLocation.coordinates[1],
-                longitude: estimateTripDto.startLocation.coordinates[0],
-              },
-            },
-          },
-        },
-      ],
-      destinations: [
-        {
-          waypoint: {
-            location: {
-              latLng: {
-                latitude: estimateTripDto.endLocation.coordinates[1],
-                longitude: estimateTripDto.endLocation.coordinates[0],
-              },
-            },
-          },
-        },
-      ],
-      travelMode: 'DRIVE',
-      routingPreference: 'TRAFFIC_AWARE',
-    };
-
-    const headers = {
-      'Content-Type': 'application/json',
-      'X-Goog-Api-Key': this.googleMapsApiKey,
-      'X-Goog-FieldMask':
-        'originIndex,destinationIndex,status,condition,distanceMeters,duration',
-    };
-
     try {
       const response = await firstValueFrom(
-        this.httpService.post(this.googleMapsApiUrl, requestBody, { headers }),
+        this.httpService.post(
+          `${this.googleMapsApiUrl}?origin=${estimateTripDto.origin}&destination=${estimateTripDto.destination}&key=${this.googleMapsApiKey}`,
+        ),
       );
 
-      if (
-        response.statusText != 'OK' ||
-        response.data[0].condition != 'ROUTE_EXISTS'
-      ) {
+      const route = response.data.routes[0];
+
+      if (!response.data?.routes?.length) {
         throw new RpcException({
           statusCode: HttpStatus.NOT_FOUND,
-          message: 'Não foi possivel encontrar a rota da Google Api.',
+          message: 'Nao foi possivel encontrar rota.',
         });
       }
 
-      const route = response.data[0];
+      const distanceInMeters: number = route.legs[0].distance.value;
 
-      const distanceInMeters: number = route.distanceMeters;
       const durationInSeconds: number = parseFloat(
-        route.duration.replace('s', ''),
+        route.legs[0].duration.value,
       );
+
+      const startAddress = route.legs[0].start_address;
+      const endAddress = route.legs[0].end_address;
+
       const price = this.calculatePrice(distanceInMeters, durationInSeconds);
 
       return {
         estimatedPrice: price,
         currency: 'BRL',
-        distance: route.distance,
-        duration: route.duration,
+        distance: route.legs[0].distance.text,
+        duration: route.legs[0].duration.text,
+        start_address: startAddress,
+        end_address: endAddress,
       };
     } catch (error) {
+      if (error instanceof RpcException) {
+        throw error;
+      }
+
+      if (isAxiosError(error)) {
+        throw new RpcException({
+          statusCode: HttpStatus.BAD_GATEWAY,
+          message: 'Falha ao consultar Google Maps.',
+          details: error.response?.data ?? error.message,
+        });
+      }
+
       throw new RpcException({
-        statusCode: HttpStatus.BAD_GATEWAY,
-        message: 'Não foi possível calcular a estimativa da rota.',
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Erro interno ao estimar corrida.',
       });
     }
   }
 
-  async checkhealth() {
-    const result = this.dispatchClient.emit('check.health', 'Is this healthy?');
-    console.log('🚀 ~ TripService ~ health ~ result:', result);
+  async create(createTripDto: CreateTripDto): Promise<TripResponse> {
+    const estimatedPrice = this.calculatePrice(
+      createTripDto.distanceInMeters,
+      createTripDto.durationInSeconds,
+    );
 
-    return result;
-  }
-
-  async create(createTripDto: CreateTripDto): Promise<TripResponseDto> {
-    const { startLocation, endLocation } = createTripDto;
-    const estimate = await this.estimate({ startLocation, endLocation });
     const trip = await this.tripModel.create({
       ...createTripDto,
       status: 'requested',
-      estimatedPrice: estimate.estimatedPrice,
+      estimatedPrice: estimatedPrice,
     });
 
     const result = this.mapToResponseDto(trip);
@@ -240,7 +223,7 @@ export class TripService {
     };
   }
 
-  async findOne(tripId: string): Promise<TripResponseDto> {
+  async findOne(tripId: string): Promise<TripResponse> {
     const trip = await this.tripModel.findById(tripId).exec();
     if (!trip) {
       throw new RpcException({
@@ -251,7 +234,7 @@ export class TripService {
     return this.mapToResponseDto(trip);
   }
 
-  async findUserId(id: string): Promise<TripResponseDto[]> {
+  async findUserId(id: string): Promise<TripResponse[]> {
     try {
       const trips = await this.tripModel
         .find({
@@ -287,20 +270,12 @@ export class TripService {
     return parseFloat(price.toFixed(2));
   }
 
-  private mapToResponseDto(trip: TripDocument): TripResponseDto {
+  private mapToResponseDto(trip: TripDocument): TripResponse {
     return {
       id: trip._id.toString(),
       passengerId: trip.passengerId,
       driverId: trip.driverId,
       status: trip.status,
-      startLocation: {
-        type: 'Point',
-        coordinates: trip.startLocation.coordinates as [number, number],
-      },
-      endLocation: {
-        type: 'Point',
-        coordinates: trip.endLocation.coordinates as [number, number],
-      },
       estimatedPrice: trip.estimatedPrice,
       finalPrice: trip.finalPrice,
       createdAt: trip.createdAt.toISOString(),

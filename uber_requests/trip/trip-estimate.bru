@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: http://0.0.0.0:3000/trip/estimate
+  url: http://0.0.0.0:3000/{{prefix}}/trip/estimate
   body: json
   auth: none
 }
@@ -13,6 +13,7 @@ post {
 headers {
   Content-Type: application/json
   User-Agent: insomnia/11.6.2
+  Authorization: Bearer {{token}}
 }
 
 body:json {

@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { PointDto } from './point.dto';
 import { TripStatus } from '@app/common/shared/enum/trip-status.enum';
-export class TripResponseDto {
+export class TripResponse {
   @ApiProperty()
   id: string;
 
@@ -10,12 +9,6 @@ export class TripResponseDto {
 
   @ApiProperty()
   driverId?: string;
-
-  @ApiProperty()
-  startLocation?: PointDto;
-
-  @ApiProperty()
-  endLocation?: PointDto;
 
   @ApiProperty({ enum: TripStatus })
   status: TripStatus;

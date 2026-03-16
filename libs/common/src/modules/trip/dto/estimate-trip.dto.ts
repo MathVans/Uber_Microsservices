@@ -1,16 +1,10 @@
 import { Type } from 'class-transformer';
-import { IsEnum, IsNotEmpty, ValidateNested } from 'class-validator';
-import { PointDto } from './point.dto';
-import { TripTypeEnum } from '@app/common/shared/enum/trip-type.enum';
+import { IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
 
 export class EstimateTripDto {
-  @ValidateNested()
-  @Type(() => PointDto)
   @IsNotEmpty()
-  startLocation: PointDto;
+  origin: String;
 
-  @ValidateNested()
-  @Type(() => PointDto)
   @IsNotEmpty()
-  endLocation: PointDto;
+  destination: String;
 }

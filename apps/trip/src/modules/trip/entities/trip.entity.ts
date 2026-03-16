@@ -1,15 +1,14 @@
 import { TripStatus } from '@app/common/shared/enum/trip-status.enum';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { Point } from './point';
 
 @Schema({ timestamps: true })
 export class Trip {
-  @Prop({ type: Point, required: true })
-  startLocation: Point;
+  @Prop({ required: true })
+  origin: String;
 
-  @Prop({ type: Point, required: true })
-  endLocation: Point;
+  @Prop({ required: true })
+  destination: String;
 
   @Prop({ required: true })
   passengerId: string;
