@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: http://0.0.0.0:3000/{{prefix}}/trip/estimate
+  url: {{link}}{{prefix}}/trip/estimate
   body: json
   auth: none
 }
@@ -18,15 +18,8 @@ headers {
 
 body:json {
   {
-    "startLocation": {
-      "type": "Point",
-      "coordinates": [-38.412748, -12.939633]
-    },
-    "endLocation": {
-      "type": "Point",
-      "coordinates": [-38.477316, -12.974565]
-    },
-    "type": "DRIVE"
+    "origin": "Atakarejo de Paripe",
+    "destination": "Shopping Bahia"
   }
   
 }

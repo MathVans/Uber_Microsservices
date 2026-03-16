@@ -17,7 +17,7 @@ export class TripController {
 
   @MessagePattern(TRIP_PATTERNS.CREATE)
   create(@Payload() createTripDto: CreateTripDto) {
-    // return this.tripService.create(createTripDto);
+    return this.tripService.create(createTripDto);
   }
 
   @MessagePattern(TRIP_PATTERNS.FIND_ONE)

@@ -8,28 +8,23 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
   const kafkaBrokerUrl = configService.get<string>('KAFKA_BROKER_URL');
+  const port = configService.get<string>('PORT');
 
   const groupId = configService.get<string>(
     'KAFKA_CONSUMER_GROUP_ID',
     'dispatch-consumer',
   );
+  console.log('🚀 ~ bootstrap ~ groupId:', groupId);
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.KAFKA,
     options: {
-      client: {
-        brokers: [kafkaBrokerUrl],
-        ssl: false,
-      },
-      consumer: {
-        groupId: groupId,
-      },
-      producer: {
-        allowAutoTopicCreation: true,
-      },
+      client: { brokers: [kafkaBrokerUrl] },
+      consumer: { groupId },
+      producer: { allowAutoTopicCreation: true },
     },
   });
-
-  await app.listen(configService.get<string>('PORT'));
+  await app.startAllMicroservices();
+  await app.listen(port);
 }
 bootstrap();

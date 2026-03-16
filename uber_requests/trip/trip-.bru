@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: http://localhost:3000/trip
+  url: {{link}}{{prefix}}/trip
   body: json
   auth: none
 }
@@ -13,22 +13,20 @@ post {
 headers {
   Content-Type: application/json
   User-Agent: insomnia/11.6.2
+  Authorization: Bearer {{token}}
 }
 
 body:json {
   {
-    "passengerId": "68fa7a61dc7fd44da810e7cc",
-    "startLocation": {
-      "type": "Point",
-      "coordinates": [-38.412748, -12.939633]
-    },
-    "endLocation": {
-      "type": "Point",
-      "coordinates": [-38.477316, -12.974565]
-    }
+    "passengerId": "69b7f24370205219b94725aa",
+    "origin": "Atakarejo de Paripe",
+    "destination": "Shopping da Bahia",
+    "durationInSeconds":1500,
+    "distanceInMeters":20000
   }
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

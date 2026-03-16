@@ -11,6 +11,12 @@ export class Trip {
   destination: String;
 
   @Prop({ required: true })
+  distanceInMeters: number;
+
+  @Prop({ required: true })
+  durationInSeconds: number;
+
+  @Prop({ required: true })
   passengerId: string;
 
   @Prop({ required: false })

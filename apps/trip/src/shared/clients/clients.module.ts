@@ -9,8 +9,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         transport: Transport.KAFKA,
         options: {
           client: {
-            clientId: 'trip-service',
-            brokers: ['localhost:9092'],
+            brokers: [process.env.KAFKA_BROKERS],
           },
           producer: {
             allowAutoTopicCreation: true,

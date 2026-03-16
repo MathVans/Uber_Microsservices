@@ -8,11 +8,11 @@ export class CreateTripDto {
 
   @Type(() => String)
   @IsNotEmpty()
-  startLocation: String;
+  origin: String;
 
   @Type(() => String)
   @IsNotEmpty()
-  endLocation: String;
+  destination: String;
 
   @IsNotEmpty()
   @IsNumber()
