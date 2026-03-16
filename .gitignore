@@ -3,6 +3,8 @@
 /node_modules
 /build
 
+req.http
+/uber_requests/environments/prefix.bru
 # Logs
 logs
 *.log
