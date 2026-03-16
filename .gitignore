@@ -4,7 +4,7 @@
 /build
 
 req.http
-/uber_requests/environments/prefix.bru
+/uber_requests/environments/*
 # Logs
 logs
 *.log
