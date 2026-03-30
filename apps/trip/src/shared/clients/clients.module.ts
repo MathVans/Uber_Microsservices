@@ -1,19 +1,28 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    ClientsModule.register([
+    ClientsModule.registerAsync([
       {
         name: 'DISPATCH_SERVICE',
-        transport: Transport.KAFKA,
-        options: {
-          client: {
-            brokers: [process.env.KAFKA_BROKERS],
-          },
-          producer: {
-            allowAutoTopicCreation: true,
-          },
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: (config: ConfigService) => {
+          const brokersStr =
+            config.get<string>('KAFKA_BROKERS') ??
+            config.get<string>('KAFKA_BROKER_URL') ??
+            'localhost:9092';
+          const brokers = brokersStr.split(',').map((b) => b.trim());
+
+          return {
+            transport: Transport.KAFKA,
+            options: {
+              client: { brokers },
+              producer: { allowAutoTopicCreation: true },
+            },
+          };
         },
       },
     ]),

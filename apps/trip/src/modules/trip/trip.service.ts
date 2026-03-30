@@ -13,6 +13,7 @@ import { firstValueFrom } from 'rxjs';
 import { TripStatus } from '@app/common/shared/enum/trip-status.enum';
 import { TripResponse } from '@app/common/modules/trip/dto/trip.response';
 import { TripStatusResponse } from '@app/common/modules/trip/dto/trip-status.response';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class TripService {
@@ -110,10 +111,22 @@ export class TripService {
 
     const result = this.mapToResponseDto(trip);
 
-    this.dispatchClient.emit('trip.requested', result);
+    const payload = {
+      eventId: randomUUID(),
+      eventName: 'trip.requested',
+      occurredAt: new Date().toISOString(),
+      data: result,
+    };
+
+    this.dispatchClient.emit('trip.requested', payload).subscribe({
+      next: () => console.log('[TripService] Evento emitido com sucesso'),
+      error: (err) => console.error('[TripService] Erro ao emitir evento', err),
+    });
+
     console.log(
       `[TripService] Evento 'trip.requested' emitido para a corrida ${result.id}`,
     );
+
     return result;
   }
 

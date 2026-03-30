@@ -14,7 +14,6 @@ async function bootstrap() {
     'KAFKA_CONSUMER_GROUP_ID',
     'dispatch-consumer',
   );
-  console.log('🚀 ~ bootstrap ~ groupId:', groupId);
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.KAFKA,

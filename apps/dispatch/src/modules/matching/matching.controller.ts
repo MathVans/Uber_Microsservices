@@ -19,8 +19,8 @@ export class MatchingController {
     // 1. Buscar motoristas próximos
     // 2. Enviar notificação aos motoristas
     // 3. Aguardar aceitação
+    // 4. Confirma corrida
 
-    // Exemplo:
-    // await this.dispatchService.findNearbyDrivers(tripData);
+
   }
 }

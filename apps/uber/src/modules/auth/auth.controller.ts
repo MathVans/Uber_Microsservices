@@ -32,7 +32,7 @@ export class AuthController {
     type: RegisterDto,
     examples: {
       exemplo1: {
-        summary: 'Registrar usuário',
+        summary: 'Registrar um novo usuário',
         value: {
           name: 'Joe Jones',
           email: 'Joe.Jones@example.com',
