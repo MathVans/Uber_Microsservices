@@ -2,14 +2,21 @@ import { Module } from '@nestjs/common';
 import { TripService } from './trip.service';
 import { TripController } from './trip.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    ClientsModule.register([
+    ClientsModule.registerAsync([
       {
         name: 'TRIP_CLIENT',
-        transport: Transport.TCP,
-        options: { port: 3002 },
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: (config: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            port: config.get<number>('TRIP_SERVICE_PORT') ?? 3002,
+          },
+        }),
       },
     ]),
   ],
