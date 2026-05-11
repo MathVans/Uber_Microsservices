@@ -1,5 +1,3 @@
-import { Types } from 'mongoose';
-
 export class UserResponseDto {
   id: string;
   name: string;

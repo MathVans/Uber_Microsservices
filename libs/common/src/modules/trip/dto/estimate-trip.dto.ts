@@ -3,8 +3,8 @@ import { IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
 
 export class EstimateTripDto {
   @IsNotEmpty()
-  origin: String;
+  origin: string;
 
   @IsNotEmpty()
-  destination: String;
+  destination: string;
 }

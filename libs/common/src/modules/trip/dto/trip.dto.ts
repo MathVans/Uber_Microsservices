@@ -1,31 +1,29 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEnum,
-  IsMongoId,
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsString,
   ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 import { TripStatus } from '@app/common/shared/enum/trip-status.enum';
 
 export class TripDto {
-  @IsMongoId({ message: 'O ID do passageiro é inválido.' })
+  @IsString({ message: 'O ID do passageiro é inválido.' })
   @IsNotEmpty({ message: 'O ID do passageiro é obrigatório.' })
   passengerId: string;
 
-  @IsMongoId({ message: 'O ID do passageiro é inválido.' })
+  @IsString({ message: 'O ID do passageiro é inválido.' })
   @IsOptional()
   driverId: string;
 
   @ValidateNested()
   @IsNotEmpty()
-  origin: String;
+  origin: string;
 
   @ValidateNested()
   @IsNotEmpty()
-  destination: String;
+  destination: string;
 
   @IsEnum(TripStatus)
   @IsNotEmpty()

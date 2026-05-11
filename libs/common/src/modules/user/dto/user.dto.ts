@@ -1,7 +1,5 @@
 import {
   IsEmail,
-  IsInt,
-  IsMongoId,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -9,7 +7,7 @@ import {
 } from 'class-validator';
 
 export class UserDTO {
-  @IsMongoId({ message: 'O ID deve ser um ObjectId válido do MongoDB.' })
+  @IsString({ message: 'O ID deve ser uma string válida.' })
   @IsOptional() // O ID é opcional pois será gerado automaticamente
   id: string;
 

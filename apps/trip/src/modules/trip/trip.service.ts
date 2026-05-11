@@ -1,19 +1,19 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateTripDto } from '@app/common/modules/trip/dto/create-trip.dto';
-import { InjectModel } from '@nestjs/mongoose';
-import { Trip, TripDocument } from './entities/trip.entity';
-import { Model } from 'mongoose';
+import { Trip } from './entities/trip.entity';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { EstimateTripDto } from '@app/common/modules/trip/dto/estimate-trip.dto';
 import { EstimateTripResponse } from '@app/common/modules/trip/dto/estimate-trip.reponse';
 import { HttpService } from '@nestjs/axios';
-import { AxiosError, isAxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import { TripStatus } from '@app/common/shared/enum/trip-status.enum';
 import { TripResponse } from '@app/common/modules/trip/dto/trip.response';
 import { TripStatusResponse } from '@app/common/modules/trip/dto/trip-status.response';
 import { randomUUID } from 'crypto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class TripService {
@@ -21,7 +21,7 @@ export class TripService {
   private readonly googleMapsApiUrl: string;
 
   constructor(
-    @InjectModel(Trip.name) private tripModel: Model<TripDocument>,
+    @InjectRepository(Trip) private tripRepository: Repository<Trip>,
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
 
@@ -98,24 +98,28 @@ export class TripService {
   }
 
   async create(createTripDto: CreateTripDto): Promise<TripResponse> {
+    
+    
     const estimatedPrice = this.calculatePrice(
       createTripDto.distanceInMeters,
       createTripDto.durationInSeconds,
     );
 
-    const trip = await this.tripModel.create({
+    const newTrip = {
       ...createTripDto,
-      status: 'requested',
+      status: TripStatus.REQUESTED,
       estimatedPrice: estimatedPrice,
-    });
+    };
 
-    const result = this.mapToResponseDto(trip);
+    const trip = this.tripRepository.create(newTrip);
+
+    const savedTrip = await this.tripRepository.save(trip);
 
     const payload = {
       eventId: randomUUID(),
       eventName: 'trip.requested',
       occurredAt: new Date().toISOString(),
-      data: result,
+      data: savedTrip,
     };
 
     this.dispatchClient.emit('trip.requested', payload).subscribe({
@@ -124,22 +128,14 @@ export class TripService {
     });
 
     console.log(
-      `[TripService] Evento 'trip.requested' emitido para a corrida ${result.id}`,
+      `[TripService] Evento 'trip.requested' emitido para a corrida ${savedTrip.id}`,
     );
 
-    return result;
+    return savedTrip;
   }
 
   async cancel(tripId: string): Promise<TripStatusResponse> {
-    const updateData = {
-      $set: {
-        status: TripStatus.CANCELED,
-      },
-    };
-
-    const trip = await this.tripModel
-      .findByIdAndUpdate(tripId, updateData)
-      .exec();
+    const trip = await this.tripRepository.findOneBy({ id: tripId });
 
     if (!trip) {
       throw new RpcException({
@@ -147,6 +143,9 @@ export class TripService {
         message: 'Viagem não encontrada.',
       });
     }
+
+    trip.status = TripStatus.CANCELED;
+    await this.tripRepository.save(trip);
 
     const date = new Date(Date.now());
 
@@ -158,15 +157,7 @@ export class TripService {
   }
 
   async accept(tripId: string): Promise<TripStatusResponse> {
-    const updateData = {
-      $set: {
-        status: TripStatus.ACCEPTED,
-      },
-    };
-
-    const trip = await this.tripModel
-      .findByIdAndUpdate(tripId, updateData)
-      .exec();
+    const trip = await this.tripRepository.findOneBy({ id: tripId });
 
     if (!trip) {
       throw new RpcException({
@@ -174,6 +165,9 @@ export class TripService {
         message: 'Viagem não encontrada.',
       });
     }
+
+    trip.status = TripStatus.ACCEPTED;
+    await this.tripRepository.save(trip);
 
     const date = new Date(Date.now());
 
@@ -185,15 +179,7 @@ export class TripService {
   }
 
   async start(tripId: string): Promise<TripStatusResponse> {
-    const updateData = {
-      $set: {
-        status: TripStatus.IN_PROGRESS,
-      },
-    };
-
-    const trip = await this.tripModel
-      .findByIdAndUpdate(tripId, updateData)
-      .exec();
+    const trip = await this.tripRepository.findOneBy({ id: tripId });
 
     if (!trip) {
       throw new RpcException({
@@ -201,6 +187,9 @@ export class TripService {
         message: 'Viagem não encontrada.',
       });
     }
+
+    trip.status = TripStatus.IN_PROGRESS;
+    await this.tripRepository.save(trip);
 
     const date = new Date(Date.now());
     return {
@@ -211,15 +200,7 @@ export class TripService {
   }
 
   async finish(tripId: string): Promise<TripStatusResponse> {
-    const updateData = {
-      $set: {
-        status: TripStatus.COMPLETED,
-      },
-    };
-
-    const trip = await this.tripModel
-      .findByIdAndUpdate(tripId, updateData)
-      .exec();
+    const trip = await this.tripRepository.findOneBy({ id: tripId });
 
     if (!trip) {
       throw new RpcException({
@@ -227,6 +208,9 @@ export class TripService {
         message: 'Viagem não encontrada.',
       });
     }
+
+    trip.status = TripStatus.COMPLETED;
+    await this.tripRepository.save(trip);
 
     const date = new Date(Date.now());
     return {
@@ -237,25 +221,23 @@ export class TripService {
   }
 
   async findOne(tripId: string): Promise<TripResponse> {
-    const trip = await this.tripModel.findById(tripId).exec();
+    const trip = await this.tripRepository.findOneBy({ id: tripId });
     if (!trip) {
       throw new RpcException({
         statusCode: HttpStatus.NOT_FOUND,
         message: 'Viagem não encontrada.',
       });
     }
-    return this.mapToResponseDto(trip);
+    return trip;
   }
 
   async findUserId(id: string): Promise<TripResponse[]> {
     try {
-      const trips = await this.tripModel
-        .find({
-          $or: [{ passengerId: id }, { driverId: id }],
-        })
-        .exec();
+      const trips = await this.tripRepository.find({
+        where: [{ passengerId: id }, { driverId: id }],
+      });
 
-      return trips.map((trip) => this.mapToResponseDto(trip));
+      return trips;
     } catch (error) {
       throw new RpcException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -281,17 +263,5 @@ export class TripService {
       durationInMinutes * PER_MINUTE_RATE;
 
     return parseFloat(price.toFixed(2));
-  }
-
-  private mapToResponseDto(trip: TripDocument): TripResponse {
-    return {
-      id: trip._id.toString(),
-      passengerId: trip.passengerId,
-      driverId: trip.driverId,
-      status: trip.status,
-      estimatedPrice: trip.estimatedPrice,
-      finalPrice: trip.finalPrice,
-      createdAt: trip.createdAt.toISOString(),
-    };
   }
 }

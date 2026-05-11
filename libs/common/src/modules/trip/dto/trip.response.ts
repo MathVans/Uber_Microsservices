@@ -20,5 +20,5 @@ export class TripResponse {
   finalPrice?: number;
 
   @ApiProperty()
-  createdAt: string;
+  createdAt: Date;
 }

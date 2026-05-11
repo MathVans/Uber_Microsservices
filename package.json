@@ -17,7 +17,13 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/uber/test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/uber/test/jest-e2e.json",
+    "migration:generate:users": "node -r ts-node/register -r tsconfig-paths/register node_modules/typeorm/cli.js -d apps/users/src/infrastructure/database/typeorm.datasource.ts migration:generate",
+    "migration:run:users": "node -r ts-node/register -r tsconfig-paths/register node_modules/typeorm/cli.js -d apps/users/src/infrastructure/database/typeorm.datasource.ts migration:run",
+    "migration:revert:users": "node -r ts-node/register -r tsconfig-paths/register node_modules/typeorm/cli.js -d apps/users/src/infrastructure/database/typeorm.datasource.ts migration:revert",
+    "migration:generate:trip": "node -r ts-node/register -r tsconfig-paths/register node_modules/typeorm/cli.js -d apps/trip/src/shared/infra/database/typeorm.datasource.ts migration:generate",
+    "migration:run:trip": "node -r ts-node/register -r tsconfig-paths/register node_modules/typeorm/cli.js -d apps/trip/src/shared/infra/database/typeorm.datasource.ts migration:run",
+    "migration:revert:trip": "node -r ts-node/register -r tsconfig-paths/register node_modules/typeorm/cli.js -d apps/trip/src/shared/infra/database/typeorm.datasource.ts migration:revert"
   },
   "dependencies": {
     "@nestjs/axios": "^4.0.1",
@@ -31,16 +37,21 @@
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.0",
+    "@nestjs/typeorm": "^11.0.0",
     "@types/geojson": "^7946.0.16",
     "@types/uuid": "^10.0.0",
     "axios": "^1.13.6",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
+    "dotenv": "^17.3.1",
     "kafkajs": "^2.2.4",
+    "pg": "^8.20.0",
+    "postgres": "^3.4.8",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "swagger-themes": "^1.4.3",
+    "typeorm": "^0.3.28",
     "uuid": "^13.0.0"
   },
   "devDependencies": {

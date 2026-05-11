@@ -1,18 +1,18 @@
-import { IsMongoId, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateTripDto {
-  @IsMongoId({ message: 'O ID do passageiro é inválido.' })
+  @IsString({ message: 'O ID do passageiro é inválido.' })
   @IsNotEmpty({ message: 'O ID do passageiro é obrigatório.' })
   passengerId: string;
 
   @Type(() => String)
   @IsNotEmpty()
-  origin: String;
+  origin: string;
 
   @Type(() => String)
   @IsNotEmpty()
-  destination: String;
+  destination: string;
 
   @IsNotEmpty()
   @IsNumber()

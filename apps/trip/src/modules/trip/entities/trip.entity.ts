@@ -1,49 +1,36 @@
+import { BaseModel } from '@app/common/shared/entities/base.model';
 import { TripStatus } from '@app/common/shared/enum/trip-status.enum';
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Column, Entity, Index } from 'typeorm';
 
-@Schema({ timestamps: true })
-export class Trip {
-  @Prop({ required: true })
-  origin: String;
+@Entity('trip')
+@Index('idx_trip_passenger_id', ['passengerId'])
+@Index('idx_trip_driver_id', ['driverId'])
+@Index('idx_trip_status', ['status'])
+export class Trip extends BaseModel {
+  @Column({ type: 'text' })
+  origin: string;
 
-  @Prop({ required: true })
-  destination: String;
+  @Column({ type: 'text' })
+  destination: string;
 
-  @Prop({ required: true })
+  @Column({ type: 'int' })
   distanceInMeters: number;
 
-  @Prop({ required: true })
+  @Column({ type: 'int' })
   durationInSeconds: number;
 
-  @Prop({ required: true })
+  @Column({ type: 'varchar', length: 36 })
   passengerId: string;
 
-  @Prop({ required: false })
-  driverId: string;
+  @Column({ type: 'varchar', length: 36, nullable: true })
+  driverId?: string;
 
-  @Prop({ required: false, type: String, enum: Object.values(TripStatus) })
+  @Column({ type: 'enum', enum: TripStatus, default: TripStatus.REQUESTED })
   status: TripStatus;
 
-  @Prop({ required: false })
-  estimatedPrice: number;
+  @Column({ type: 'numeric', precision: 10, scale: 2, nullable: true })
+  estimatedPrice?: number;
 
-  @Prop({ required: false })
-  finalPrice: number;
-
-  createdAt: Date;
-  updatedAt: Date;
+  @Column({ type: 'numeric', precision: 10, scale: 2, nullable: true })
+  finalPrice?: number;
 }
-
-export type TripDocument = Trip & Document;
-export const TripSchema = SchemaFactory.createForClass(Trip);
-
-TripSchema.index({ startLocation: '2dsphere' });
-TripSchema.set('toJSON', {
-  virtuals: true,
-  transform: (doc, ret) => {
-    delete ret._id;
-    delete ret.__v;
-    return ret;
-  },
-});

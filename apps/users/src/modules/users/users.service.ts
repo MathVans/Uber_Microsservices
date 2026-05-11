@@ -1,16 +1,18 @@
 import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateUserDto } from '@app/common/modules/user/dto/update-user.dto';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { User, UserDocument } from './entities/user.entity';
+import { User } from './entities/user.entity';
 import { RpcException } from '@nestjs/microservices';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+  ) {}
 
   async findOne(id: string): Promise<User> {
-    const user = await this.userModel.findById(id);
+    const user = await this.userRepository.findOneBy({ id });
 
     if (!user) {
       throw new RpcException({
@@ -24,9 +26,7 @@ export class UsersService {
 
   async update(updateUserDto: UpdateUserDto): Promise<User> {
     const { id, ...data } = updateUserDto;
-    const updatedUser = await this.userModel
-      .findByIdAndUpdate(id, data, { new: true })
-      .exec();
+    const updatedUser = await this.userRepository.findOneBy({ id });
 
     if (!updatedUser) {
       throw new RpcException({
@@ -34,6 +34,15 @@ export class UsersService {
         message: 'Usuário não encontrado',
       });
     }
+
+    updatedUser.name = updateUserDto.name
+      ? updateUserDto.name
+      : updatedUser.name;
+    updatedUser.role = updateUserDto.role
+      ? updateUserDto.role
+      : updatedUser.role;
+
+    await this.userRepository.save(updatedUser);
 
     return updatedUser;
   }

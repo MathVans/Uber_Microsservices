@@ -1,40 +1,28 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
-import * as bcrypt from 'bcrypt';
 import { Role } from '@app/common/shared/enum/role.enum';
+import { BeforeInsert, Column, Entity } from 'typeorm';
+import { BaseModel } from '@app/common/shared/entities/base.model';
+import * as bcrypt from 'bcrypt';
 
-export type UserDocument = User & Document;
-
-@Schema({ timestamps: true })
-export class User {
-  @Prop({ required: true })
+@Entity('user')
+export class User extends BaseModel {
+  @Column({ type: 'varchar', length: 150 })
   name: string;
 
-  @Prop({ required: true })
+  @Column({ type: 'varchar', length: 150 })
   email: string;
 
-  @Prop({
-    required: true,
-    type: String,
-    enum: Object.values(Role),
-  })
+  @Column({ type: 'varchar', length: 50 })
   role: Role;
 
-  @Prop({ required: true, select: false })
+  @Column({ type: 'varchar', length: 150, select: false })
   password: string;
+
+  @BeforeInsert()
+  async encryptPassword() {
+    if (!this.password) {
+      return;
+    }
+
+    this.password = await bcrypt.hash(this.password, 10);
+  }
 }
-
-export const UserSchema = SchemaFactory.createForClass(User);
-
-UserSchema.pre<UserDocument>('save', async function (next) {
-  if (!this.isModified('password')) {
-    return next();
-  }
-  try {
-    const salt = await bcrypt.genSalt();
-    this.password = await bcrypt.hash(this.password, salt);
-    return next();
-  } catch (err) {
-    return next(err as Error);
-  }
-});

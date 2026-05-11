@@ -5,20 +5,20 @@ networks:
     driver: bridge
 
 services:
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb
-    restart: always
+  postgres:
+    image: postgres:latest
+    container_name: postgres_db
     ports:
-      - '27017:27017'
+      - '5432:5432'
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
+      POSTGRES_DB: postgres
+      POSTGRES_USER: uber_user
+      POSTGRES_PASSWORD: uber_password
     volumes:
-      - mongo-data:/data/db
+      - postgres-data:/var/lib/postgresql/data
+      - ./docker/postgres-init:/docker-entrypoint-initdb.d:ro
     networks:
       - uber-network
-
   broker:
     image: apache/kafka:latest
     container_name: broker
@@ -54,4 +54,4 @@ services:
       - uber-network
 
 volumes:
-  mongo-data:
+  postgres-data:

@@ -5,24 +5,26 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument } from '../users/entities/user.entity';
-import { Model } from 'mongoose';
+import { User } from '../users/entities/user.entity';
 import { RegisterDto } from '@app/common/modules/auth/dto/register.dto';
 import { LoginDto } from '@app/common/modules/auth/dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtToken } from '@app/common/shared/interfaces/jwt-token.interface';
 import { JwtService } from '@nestjs/jwt';
 import { RpcException } from '@nestjs/microservices';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
   async register(registerDto: RegisterDto): Promise<JwtToken> {
-    const existingUser = await this.findByEmail(registerDto.email);
+    const existingUser = await this.userRepository.findOneBy({
+      email: registerDto.email,
+    });
 
     if (existingUser) {
       throw new RpcException({
@@ -31,9 +33,10 @@ export class AuthService {
       });
     }
 
-    const createdUser = await this.userModel.create({ ...registerDto });
+    const newUser = await this.userRepository.create({ ...registerDto });
+    console.log('🚀 ~ AuthService ~ register ~ createdUser:', newUser);
 
-    await createdUser.save();
+    const createdUser = await this.userRepository.save(newUser);
 
     const payload = {
       email: createdUser.email,
@@ -53,10 +56,17 @@ export class AuthService {
   }
 
   async login(loginData: LoginDto): Promise<JwtToken> {
-    const user = await this.userModel
-      .findOne({ email: loginData.email })
-      .select('+password')
-      .exec();
+    const user = await this.userRepository.findOne({
+      where: { email: loginData.email },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        password: true,
+      },
+    });
+
 
     if (!user || !user.password) {
       throw new RpcException({
@@ -88,9 +98,5 @@ export class AuthService {
       role: user.role,
       id: user.id,
     };
-  }
-
-  async findByEmail(email: string): Promise<User | null> {
-    return await this.userModel.findOne({ email }).exec();
   }
 }
