@@ -5,7 +5,7 @@ meta {
 }
 
 get {
-  url: http://localhost:3000/trip
+  url: {{link}}{{prefix}}/trip
   body: json
   auth: none
 }
@@ -13,12 +13,12 @@ get {
 headers {
   Content-Type: application/json
   User-Agent: insomnia/11.6.2
-  A: 
+  Authorization: {{token}}
 }
 
 body:json {
   {
-    "id": "69b84543dd0a6acd215fea4e"
+    "id": ""
   }
 }
 

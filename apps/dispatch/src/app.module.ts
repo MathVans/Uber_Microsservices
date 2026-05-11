@@ -12,7 +12,5 @@ import { ConfigModule } from '@nestjs/config';
     }),
     MatchingModule,
   ],
-  controllers: [MatchingController],
-  providers: [MatchingService],
 })
 export class AppModule {}

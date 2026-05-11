@@ -44,7 +44,9 @@ export class TripService {
 
     this.dispatchClient.emit(eventName, payload).subscribe({
       next: () =>
-        console.log(`[TripService] Evento '${eventName}' emitido com sucesso`),
+        console.log(
+          `[TripService] Evento '${eventName}-${payload.eventId}' emitido com sucesso`,
+        ),
       error: (err) =>
         console.error(`[TripService] Erro ao emitir '${eventName}'`, err),
     });
@@ -123,10 +125,6 @@ export class TripService {
     const savedTrip = await this.tripRepository.save(trip);
 
     this.emitEvent('trip.requested', savedTrip);
-
-    console.log(
-      `[TripService] Evento 'trip.requested' emitido para a corrida ${savedTrip.id}`,
-    );
 
     return savedTrip;
   }

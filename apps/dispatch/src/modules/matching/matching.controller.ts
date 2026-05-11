@@ -20,7 +20,5 @@ export class MatchingController {
     // 2. Enviar notificação aos motoristas
     // 3. Aguardar aceitação
     // 4. Confirma corrida
-
-
   }
 }
