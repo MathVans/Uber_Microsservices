@@ -36,6 +36,17 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           };
         },
       },
+      {
+        name: 'DISPATCH_API_SERVICE',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: (config: ConfigService) => {
+          return {
+            transport: Transport.TCP,
+            options: { port: 3010 },
+          };
+        },
+      },
     ]),
   ],
   controllers: [DispatchController],

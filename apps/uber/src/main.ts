@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { setupSwagger } from './shared/configs/swagger.config';
+import { setupSwagger } from './infrastructure/configs/swagger.config';
 
 async function bootstrap() {
   const port = Number(process.env.PORT) || 3000;

@@ -13,7 +13,7 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
-
+NOVA_ARQUITETURA.md
 analise.md
 # OS
 .DS_Store

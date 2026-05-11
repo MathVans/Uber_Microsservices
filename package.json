@@ -23,9 +23,12 @@
     "migration:revert:users": "node -r ts-node/register -r tsconfig-paths/register node_modules/typeorm/cli.js -d apps/users/src/infrastructure/database/typeorm.datasource.ts migration:revert",
     "migration:generate:trip": "node -r ts-node/register -r tsconfig-paths/register node_modules/typeorm/cli.js -d apps/trip/src/shared/infra/database/typeorm.datasource.ts migration:generate",
     "migration:run:trip": "node -r ts-node/register -r tsconfig-paths/register node_modules/typeorm/cli.js -d apps/trip/src/shared/infra/database/typeorm.datasource.ts migration:run",
-    "migration:revert:trip": "node -r ts-node/register -r tsconfig-paths/register node_modules/typeorm/cli.js -d apps/trip/src/shared/infra/database/typeorm.datasource.ts migration:revert"
+    "migration:revert:trip": "node -r ts-node/register -r tsconfig-paths/register node_modules/typeorm/cli.js -d apps/trip/src/shared/infra/database/typeorm.datasource.ts migration:revert",
+    "proto:generate": "protoc --plugin=node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./libs/common/src/proto --ts_proto_opt=nestJs=true,addGrpcMetadata=true,addNestjsRestParameter=true ./libs/common/src/proto/*.proto"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.14.3",
+    "@grpc/proto-loader": "^0.8.1",
     "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
@@ -38,6 +41,7 @@
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.0",
     "@nestjs/typeorm": "^11.0.0",
+    "@nestjs/websockets": "^11.1.19",
     "@types/geojson": "^7946.0.16",
     "@types/uuid": "^10.0.0",
     "axios": "^1.13.6",
@@ -76,6 +80,7 @@
     "ts-jest": "^29.2.5",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
+    "ts-proto": "^2.11.8",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0"

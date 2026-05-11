@@ -6,15 +6,18 @@ import {
   Transport,
 } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
+import { join } from 'path';
 
 async function bootstrap() {
   const port = Number(process.env.PORT) || 3050;
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     AppModule,
     {
-      transport: Transport.TCP,
+      transport: Transport.GRPC,
       options: {
-        port: 3001,
+        package: 'users',
+        protoPath: join(__dirname, './infrastructure/proto/users.proto'),
+        url: 'localhost:50051',
       },
     },
   );
