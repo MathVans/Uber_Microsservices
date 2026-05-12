@@ -24,7 +24,7 @@
     "migration:generate:trip": "node -r ts-node/register -r tsconfig-paths/register node_modules/typeorm/cli.js -d apps/trip/src/shared/infra/database/typeorm.datasource.ts migration:generate",
     "migration:run:trip": "node -r ts-node/register -r tsconfig-paths/register node_modules/typeorm/cli.js -d apps/trip/src/shared/infra/database/typeorm.datasource.ts migration:run",
     "migration:revert:trip": "node -r ts-node/register -r tsconfig-paths/register node_modules/typeorm/cli.js -d apps/trip/src/shared/infra/database/typeorm.datasource.ts migration:revert",
-    "proto:generate": "protoc --plugin=node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./libs/common/src/proto --ts_proto_opt=nestJs=true,addGrpcMetadata=true,addNestjsRestParameter=true ./libs/common/src/proto/*.proto"
+    "proto:generate": "protoc --plugin=node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./ --ts_proto_opt=nestJs=true,addGrpcMetadata=true,addNestjsRestParameter=false ./libs/common/src/proto/*.proto"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.14.3",
@@ -50,6 +50,7 @@
     "class-validator": "^0.14.2",
     "dotenv": "^17.3.1",
     "kafkajs": "^2.2.4",
+    "passport-jwt": "^4.0.1",
     "pg": "^8.20.0",
     "postgres": "^3.4.8",
     "reflect-metadata": "^0.2.2",

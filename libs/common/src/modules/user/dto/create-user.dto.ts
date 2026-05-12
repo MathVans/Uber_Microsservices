@@ -1,8 +1,7 @@
-import { Role } from '@app/common/shared/enum/role.enum';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
-  IsEnum,
+  IsIn,
   IsNotEmpty,
   IsString,
   IsStrongPassword,
@@ -27,6 +26,6 @@ export class CreateUserDto {
   })
   password: string;
 
-  @IsEnum(Role)
-  role: Role;
+  @IsIn(['driver', 'passenger', 'admin'])
+  role: string;
 }

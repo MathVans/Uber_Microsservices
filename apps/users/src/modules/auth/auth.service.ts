@@ -1,10 +1,4 @@
-import {
-  BadRequestException,
-  ConflictException,
-  HttpStatus,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { User } from '../users/entities/user.entity';
 import { RegisterDto } from '@app/common/modules/auth/dto/register.dto';
 import { LoginDto } from '@app/common/modules/auth/dto/login.dto';
@@ -34,7 +28,6 @@ export class AuthService {
     }
 
     const newUser = await this.userRepository.create({ ...registerDto });
-    console.log('🚀 ~ AuthService ~ register ~ createdUser:', newUser);
 
     const createdUser = await this.userRepository.save(newUser);
 
@@ -66,7 +59,6 @@ export class AuthService {
         password: true,
       },
     });
-
 
     if (!user || !user.password) {
       throw new RpcException({

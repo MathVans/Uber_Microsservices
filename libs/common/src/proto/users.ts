@@ -5,20 +5,11 @@
 // source: libs/common/src/proto/users.proto
 
 /* eslint-disable */
-import type { Metadata } from '@grpc/grpc-js';
-import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
-import { Observable } from 'rxjs';
+import type { Metadata } from "@grpc/grpc-js";
+import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
+import { Observable } from "rxjs";
 
-export const protobufPackage = 'identity';
-
-export enum UserRole {
-  /** ROLE_UNKNOWN - Obrigatório ser 0 */
-  ROLE_UNKNOWN = 0,
-  driver = 1,
-  rider = 2,
-  admin = 3,
-  UNRECOGNIZED = -1,
-}
+export const protobufPackage = "identity";
 
 export interface FindOneRequest {
   id: string;
@@ -27,73 +18,46 @@ export interface FindOneRequest {
 export interface UpdateRequest {
   id: string;
   name: string;
-  role: UserRole;
+  role: string;
 }
 
 export interface UserResponse {
   id: string;
   name: string;
-  /** O campo agora usa o tipo Enum */
-  role: UserRole;
+  email: string;
+  role: string;
 }
 
-export const IDENTITY_PACKAGE_NAME = 'identity';
+export const IDENTITY_PACKAGE_NAME = "identity";
 
 export interface IdentityServiceClient {
-  findOne(
-    request: FindOneRequest,
-    metadata: Metadata,
-    ...rest: any
-  ): Observable<UserResponse>;
+  findOne(request: FindOneRequest, metadata?: Metadata): Observable<UserResponse>;
 
-  update(
-    request: UpdateRequest,
-    metadata: Metadata,
-    ...rest: any
-  ): Observable<UserResponse>;
+  update(request: UpdateRequest, metadata?: Metadata): Observable<UserResponse>;
 }
 
 export interface IdentityServiceController {
   findOne(
     request: FindOneRequest,
-    metadata: Metadata,
-    ...rest: any
+    metadata?: Metadata,
   ): Promise<UserResponse> | Observable<UserResponse> | UserResponse;
 
-  update(
-    request: UpdateRequest,
-    metadata: Metadata,
-    ...rest: any
-  ): Promise<UserResponse> | Observable<UserResponse> | UserResponse;
+  update(request: UpdateRequest, metadata?: Metadata): Promise<UserResponse> | Observable<UserResponse> | UserResponse;
 }
 
 export function IdentityServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ['findOne', 'update'];
+    const grpcMethods: string[] = ["findOne", "update"];
     for (const method of grpcMethods) {
-      const descriptor: any = Reflect.getOwnPropertyDescriptor(
-        constructor.prototype,
-        method,
-      );
-      GrpcMethod('IdentityService', method)(
-        constructor.prototype[method],
-        method,
-        descriptor,
-      );
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
+      GrpcMethod("IdentityService", method)(constructor.prototype[method], method, descriptor);
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
-      const descriptor: any = Reflect.getOwnPropertyDescriptor(
-        constructor.prototype,
-        method,
-      );
-      GrpcStreamMethod('IdentityService', method)(
-        constructor.prototype[method],
-        method,
-        descriptor,
-      );
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
+      GrpcStreamMethod("IdentityService", method)(constructor.prototype[method], method, descriptor);
     }
   };
 }
 
-export const IDENTITY_SERVICE_NAME = 'IdentityService';
+export const IDENTITY_SERVICE_NAME = "IdentityService";

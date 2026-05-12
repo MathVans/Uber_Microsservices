@@ -12,7 +12,7 @@ export class User extends BaseModel {
   email: string;
 
   @Column({ type: 'varchar', length: 50 })
-  role: Role;
+  role: string;
 
   @Column({ type: 'varchar', length: 150, select: false })
   password: string;

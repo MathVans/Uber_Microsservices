@@ -4,24 +4,41 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  OnModuleInit,
 } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { type ClientGrpc } from '@nestjs/microservices';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { lastValueFrom } from 'rxjs';
 import { USERS_PATTERNS } from '@app/common/modules/user/users.patterns';
+import {
+  IDENTITY_PACKAGE_NAME,
+  IDENTITY_SERVICE_NAME,
+  IdentityServiceClient,
+  UpdateRequest,
+} from '@app/common/proto/users';
 
 @Injectable()
-export class UsersService {
-  constructor(@Inject('USERS_CLIENT') private userClient: ClientProxy) {}
+export class UsersService implements OnModuleInit {
+  private grpcIdentityService: IdentityServiceClient;
 
-  async findOne(id: string) {
-    const response = this.userClient.send(USERS_PATTERNS.FIND_ONE, id);
+  constructor(
+    @Inject(IDENTITY_PACKAGE_NAME) private identityClient: ClientGrpc,
+  ) {}
+  onModuleInit() {
+    this.grpcIdentityService =
+      this.identityClient.getService<IdentityServiceClient>(
+        IDENTITY_SERVICE_NAME,
+      );
+  }
+
+  async findOne(id: string): Promise<any> {
+    const response = this.grpcIdentityService.findOne({ id });
 
     return await lastValueFrom(response);
   }
 
-  async update(updateUserDto: UpdateUserDto): Promise<any> {
-    const response = this.userClient.send(USERS_PATTERNS.UPDATE, updateUserDto);
+  async update(data: UpdateRequest): Promise<any> {
+    const response = this.grpcIdentityService.update(data);
 
     return await lastValueFrom(response);
   }

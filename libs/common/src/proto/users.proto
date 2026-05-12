@@ -3,29 +3,24 @@ syntax = "proto3";
 package identity; 
 
 service IdentityService {
-  rpc FindOne (FindOneRequest) returns (UserResponse);
-  rpc Update (UpdateRequest) returns (UserResponse);
+  rpc FindOne (FindOneRequest) returns (UserResponse){};
+  rpc Update (UpdateRequest) returns (UserResponse){};
 }
 
 message FindOneRequest {
   string id = 1; 
 }
 
-enum UserRole {
-  ROLE_UNKNOWN = 0; // Obrigatório ser 0
-  ROLE_DRIVER = 1;
-  ROLE_PASSENGER = 2;
-  ROLE_ADMIN = 3;
-}
 
 message UpdateRequest {
   string id = 1;
-  string name = 2; 
-  UserRole role = 3;
+  string name = 2;
+  string role = 3; 
 }
 
 message UserResponse {
   string id = 1;
   string name = 2;
-  UserRole role = 3; // O campo agora usa o tipo Enum
+  string email= 3;
+  string role = 4;
 }

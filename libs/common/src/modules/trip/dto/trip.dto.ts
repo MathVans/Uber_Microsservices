@@ -1,12 +1,11 @@
 import {
-  IsEnum,
+  IsIn,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { TripStatus } from '@app/common/shared/enum/trip-status.enum';
 
 export class TripDto {
   @IsString({ message: 'O ID do passageiro é inválido.' })
@@ -25,9 +24,9 @@ export class TripDto {
   @IsNotEmpty()
   destination: string;
 
-  @IsEnum(TripStatus)
   @IsNotEmpty()
-  status: TripStatus;
+  @IsIn(['requested', 'accepted', 'in_progress', 'completed', 'canceled'])
+  status: string;
 
   @IsNumber()
   @IsOptional()

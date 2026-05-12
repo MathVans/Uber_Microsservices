@@ -7,17 +7,22 @@ import {
 } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
 import { join } from 'path';
+import { AUTHENTICATION_PACKAGE_NAME } from '@app/common/proto/auth';
+import { IDENTITY_PACKAGE_NAME } from '@app/common/proto/users';
 
 async function bootstrap() {
-  const port = Number(process.env.PORT) || 3050;
+  const port = Number(process.env.PORT) || 5001;
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     AppModule,
     {
       transport: Transport.GRPC,
       options: {
-        package: 'users',
-        protoPath: join(__dirname, './infrastructure/proto/users.proto'),
-        url: 'localhost:50051',
+        package: [IDENTITY_PACKAGE_NAME, AUTHENTICATION_PACKAGE_NAME],
+        protoPath: [
+          join(process.cwd(), 'libs/common/src/proto/users.proto'),
+          join(process.cwd(), 'libs/common/src/proto/auth.proto'),
+        ],
+        url: `localhost:${port}`,
       },
     },
   );

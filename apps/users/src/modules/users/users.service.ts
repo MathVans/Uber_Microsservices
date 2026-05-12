@@ -4,13 +4,8 @@ import { User } from './entities/user.entity';
 import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {
-  FindOneRequest,
-  UpdateRequest,
-  UserResponse,
-  UserRole,
-} from '@app/common/proto/users';
-import { Role } from '@app/common/shared/enum/role.enum';
+import { FindOneRequest, UpdateRequest } from '@app/common/proto/users';
+import { UserResponse } from '@app/common/modules/user/dto/user.response';
 
 @Injectable()
 export class UsersService {
@@ -28,10 +23,10 @@ export class UsersService {
       });
     }
 
-    return this.toUserResponse(user);
+    return user;
   }
 
-  async update(updateUserDto: UpdateRequest): Promise<UserResponse> {
+  async update(updateUserDto: UpdateRequest): Promise<User> {
     const { id } = updateUserDto;
     const updatedUser = await this.userRepository.findOneBy({ id });
 
@@ -45,48 +40,12 @@ export class UsersService {
     updatedUser.name = updateUserDto.name
       ? updateUserDto.name
       : updatedUser.name;
-
-    const mappedRole = this.toRole(updateUserDto.role);
-    if (mappedRole !== undefined) {
-      updatedUser.role = mappedRole;
-    }
+    updatedUser.role = updateUserDto.role
+      ? updateUserDto.role
+      : updatedUser.role;
 
     await this.userRepository.save(updatedUser);
 
-    return this.toUserResponse(updatedUser);
-  }
-
-  private toRole(role: UserRole): Role | undefined {
-    switch (role) {
-      case UserRole.driver:
-        return Role.DRIVER;
-      case UserRole.rider:
-        return Role.RIDER;
-      case UserRole.admin:
-        return Role.ADMIN;
-      default:
-        return undefined;
-    }
-  }
-
-  private toUserResponse(user: User): UserResponse {
-    return {
-      id: user.id,
-      name: user.name,
-      role: this.toUserRole(user.role),
-    };
-  }
-
-  private toUserRole(role: Role): UserRole {
-    switch (role) {
-      case Role.DRIVER:
-        return UserRole.driver;
-      case Role.RIDER:
-        return UserRole.rider;
-      case Role.ADMIN:
-        return UserRole.admin;
-      default:
-        return UserRole.ROLE_UNKNOWN;
-    }
+    return updatedUser;
   }
 }

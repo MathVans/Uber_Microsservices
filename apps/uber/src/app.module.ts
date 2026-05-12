@@ -11,10 +11,10 @@ import { AuthModule } from './modules/auth/auth.module';
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: './apps/uber/.env' }),
     GlobalJwtModule,
+    AuthModule,
     UsersModule,
     TripModule,
     DispatchModule,
-    AuthModule,
   ],
   controllers: [],
   providers: [],

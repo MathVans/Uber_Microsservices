@@ -1,21 +1,43 @@
-import { AUTH_PATTERNS } from '@app/common/modules/auth/auth.patterns';
+import { LoginRequest, type RegisterRequest } from '@app/common/proto/auth';
 import { LoginDto } from '@app/common/modules/auth/dto/login.dto';
-import { RegisterDto } from '@app/common/modules/auth/dto/register.dto';
-import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import {
+  AUTHENTICATION_PACKAGE_NAME,
+  AUTHENTICATION_SERVICE_NAME,
+  AuthenticationServiceClient,
+} from '@app/common/proto/auth';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { type ClientGrpc } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
+import { Metadata } from '@grpc/grpc-js';
+import {
+  IDENTITY_PACKAGE_NAME,
+  IDENTITY_SERVICE_NAME,
+  IdentityServiceClient,
+} from '../../../../../libs/common/src/proto/users';
 
 @Injectable()
-export class AuthService {
-  constructor(@Inject('USERS_CLIENT') private userClient: ClientProxy) {}
+export class AuthService implements OnModuleInit {
+  private grpcAuthenticationService: AuthenticationServiceClient;
 
-  async register(data: RegisterDto) {
-    const response = this.userClient.send(AUTH_PATTERNS.REGISTER, data);
+  constructor(
+    @Inject(AUTHENTICATION_PACKAGE_NAME) private authClient: ClientGrpc,
+  ) {}
+  onModuleInit(): void {
+    this.grpcAuthenticationService =
+      this.authClient.getService<AuthenticationServiceClient>(
+        AUTHENTICATION_SERVICE_NAME,
+      );
+  }
+
+  async register(data: RegisterRequest, metadata?: Metadata) {
+    const response = this.grpcAuthenticationService.register(data, metadata);
+
     return await lastValueFrom(response);
   }
 
-  async login(data: LoginDto) {
-    const response = this.userClient.send(AUTH_PATTERNS.LOGIN, data);
+  async login(data: LoginRequest, metadata?: Metadata) {
+    // const response = this.userClient.send(AUTH_PATTERNS.LOGIN, data);
+    const response = this.grpcAuthenticationService.login(data, metadata);
     return await lastValueFrom(response);
   }
 }
