@@ -28,7 +28,6 @@ import {
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-
   @Get('/me')
   findOne(@Body() idDto: IdDto) {
     return this.usersService.findOne(idDto.id);

@@ -9,11 +9,6 @@ import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { type ClientGrpc } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import { Metadata } from '@grpc/grpc-js';
-import {
-  IDENTITY_PACKAGE_NAME,
-  IDENTITY_SERVICE_NAME,
-  IdentityServiceClient,
-} from '../../../../../libs/common/src/proto/users';
 
 @Injectable()
 export class AuthService implements OnModuleInit {
@@ -36,8 +31,11 @@ export class AuthService implements OnModuleInit {
   }
 
   async login(data: LoginRequest, metadata?: Metadata) {
-    // const response = this.userClient.send(AUTH_PATTERNS.LOGIN, data);
-    const response = this.grpcAuthenticationService.login(data, metadata);
+    const response = this.grpcAuthenticationService.login(
+      data,
+      metadata ?? new Metadata(),
+    );
+
     return await lastValueFrom(response);
   }
 }

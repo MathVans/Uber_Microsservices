@@ -2,10 +2,8 @@ import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { IDENTITY_PACKAGE_NAME } from '@app/common/proto/users';
 import { join } from 'path';
-import { AUTHENTICATION_PACKAGE_NAME } from '@app/common/proto/auth';
 
 @Module({
   imports: [

@@ -1,21 +1,13 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-  OnModuleInit,
-} from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { type ClientGrpc } from '@nestjs/microservices';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { lastValueFrom } from 'rxjs';
-import { USERS_PATTERNS } from '@app/common/modules/user/users.patterns';
 import {
   IDENTITY_PACKAGE_NAME,
   IDENTITY_SERVICE_NAME,
   IdentityServiceClient,
   UpdateRequest,
 } from '@app/common/proto/users';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -37,7 +29,7 @@ export class UsersService implements OnModuleInit {
     return await lastValueFrom(response);
   }
 
-  async update(data: UpdateRequest): Promise<any> {
+  async update(data: UpdateUserDto): Promise<any> {
     const response = this.grpcIdentityService.update(data);
 
     return await lastValueFrom(response);

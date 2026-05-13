@@ -17,8 +17,10 @@ export interface FindOneRequest {
 
 export interface UpdateRequest {
   id: string;
-  name: string;
-  role: string;
+  name?: string | undefined;
+  email?: string | undefined;
+  role?: string | undefined;
+  password?: string | undefined;
 }
 
 export interface UserResponse {
