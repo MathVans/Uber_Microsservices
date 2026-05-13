@@ -1,8 +1,6 @@
-import { BadRequestException, Controller, UseFilters } from '@nestjs/common';
-import { GrpcMethod, MessagePattern, Payload } from '@nestjs/microservices';
+import { Controller } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices';
 import { UsersService } from './users.service';
-import { UpdateUserDto } from '@app/common/modules/user/dto/update-user.dto';
-import { User } from './entities/user.entity';
 import {
   type FindOneRequest,
   type UpdateRequest,

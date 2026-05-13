@@ -1,0 +1,37 @@
+syntax = "proto3"
+
+package trip;
+
+service TripService {
+  health () returns (){}
+  estimate (EstimateRequest) returns (EstimateResponse){}
+  create (CreateRequest) returns (){}
+  findOne (FindOneRequest) returns (){}
+  findByUser (FindByUserRequest) returns (){}
+  cancel (CancelRequest) returns (){}
+  start (StartRequest) returns (){}
+  accept (AcceptRequest) returns (){}
+  finish (FinishRequest) returns (){}
+}
+
+message EstimateRequest {
+  string origin = 1;
+  string destination = 2;
+}
+
+message EstimateResponse {
+  int32 estimatedPrice = 1;
+  string currency = 2;
+  string distance = 3;
+  string duration = 4;
+  string start_address = 5;
+  string end_address = 6;
+}
+
+message CreateRequest {
+  string passengerId = 1;
+  string origin = 2;
+  string destination = 3;
+  int32 durationInSeconds = 4;
+  int32 distanceInMeters = 5;
+}

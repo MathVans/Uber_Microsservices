@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: 0.0.0.0:3000/{{prefix}}/auth/login
+  url: {{link}}{{prefix}}/auth/login
   body: json
   auth: none
 }
@@ -17,7 +17,7 @@ headers {
 
 body:json {
   {
-  "email": "passenger@example.com",
+   "email": "passenger@example.com",
    "password":"Secure123@"
   }
 }

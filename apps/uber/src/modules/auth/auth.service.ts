@@ -25,16 +25,13 @@ export class AuthService implements OnModuleInit {
   }
 
   async register(data: RegisterRequest, metadata?: Metadata) {
-    const response = this.grpcAuthenticationService.register(data, metadata);
+    const response = this.grpcAuthenticationService.register(data);
 
     return await lastValueFrom(response);
   }
 
   async login(data: LoginRequest, metadata?: Metadata) {
-    const response = this.grpcAuthenticationService.login(
-      data,
-      metadata ?? new Metadata(),
-    );
+    const response = this.grpcAuthenticationService.login(data);
 
     return await lastValueFrom(response);
   }
