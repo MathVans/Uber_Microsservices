@@ -4,23 +4,22 @@ import { lastValueFrom } from 'rxjs';
 import {
   IDENTITY_PACKAGE_NAME,
   IDENTITY_SERVICE_NAME,
-  IdentityServiceClient,
+  IdentityClient,
   UpdateRequest,
 } from '@app/common/proto/users';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService implements OnModuleInit {
-  private grpcIdentityService: IdentityServiceClient;
+  private grpcIdentityService: IdentityClient;
 
   constructor(
     @Inject(IDENTITY_PACKAGE_NAME) private identityClient: ClientGrpc,
   ) {}
   onModuleInit() {
-    this.grpcIdentityService =
-      this.identityClient.getService<IdentityServiceClient>(
-        IDENTITY_SERVICE_NAME,
-      );
+    this.grpcIdentityService = this.identityClient.getService<IdentityClient>(
+      IDENTITY_SERVICE_NAME,
+    );
   }
 
   async findOne(id: string): Promise<any> {

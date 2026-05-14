@@ -1,31 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import {
-  MicroserviceOptions,
-  RpcException,
-  Transport,
-} from '@nestjs/microservices';
-import { ValidationPipe } from '@nestjs/common';
+import { MicroserviceOptions } from '@nestjs/microservices';
+import { grpcClientOptions } from './infrastructure/config/grpc-options.config';
+import { useCustomProtobufTimestampHandler } from '@app/common/protobuf/protobufjs-wrapper';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
-    {
-      transport: Transport.TCP,
-      options: {
-        port: 3002,
-      },
-    },
-  );
+  const app = await NestFactory.create(AppModule);
+  app.connectMicroservice<MicroserviceOptions>(grpcClientOptions, {
+    inheritAppConfig: true,
+  });
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      exceptionFactory: (errors) => {
-        return new RpcException(errors);
-      },
-    }),
-  );
+  useCustomProtobufTimestampHandler();
 
-  await app.listen();
+  app.init();
+  app.startAllMicroservices();
 }
 bootstrap();

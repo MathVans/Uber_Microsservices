@@ -1,0 +1,27 @@
+meta {
+  name: Create
+  type: grpc
+  seq: 3
+}
+
+grpc {
+  url: {{trip_gRPC}}
+  method: /trips.Trips/create
+  body: grpc
+  protoPath: ../libs/common/src/proto/trip.proto
+  auth: none
+  methodType: unary
+}
+
+body:grpc {
+  name: message 1
+  content: '''
+    {
+      "passengerId": "259ce817-5259-49ae-8ced-5465c4cdfe76",
+      "origin": "Av. Luís Viana Filho, 6282 - Patamares, Salvador - BA, 41195-445, Brazil",
+      "destination": "Alameda Euvaldo Luz, 92 - Pernambués, Salvador - BA, 41098-020, Brazil",
+      "distanceInMeters": 1340,
+      "durationInSeconds": 960
+      }
+  '''
+}

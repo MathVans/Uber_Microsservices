@@ -25,8 +25,8 @@ export class Trip extends BaseModel {
   @Column({ type: 'varchar', length: 36, nullable: true })
   driverId?: string;
 
-  @Column({ type: 'enum', enum: TripStatus, default: TripStatus.REQUESTED })
-  status: TripStatus;
+  @Column({ type: 'varchar', default: TripStatus.REQUESTED })
+  status: string;
 
   @Column({ type: 'numeric', precision: 10, scale: 2, nullable: true })
   estimatedPrice?: number;

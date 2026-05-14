@@ -1,0 +1,25 @@
+meta {
+  name: Estimate
+  type: grpc
+  seq: 7
+}
+
+grpc {
+  url: {{trip_gRPC}}
+  method: /trips.Trips/estimate
+  body: grpc
+  protoPath: ../libs/common/src/proto/trip.proto
+  auth: none
+  methodType: unary
+}
+
+body:grpc {
+  name: message 1
+  content: '''
+    {
+      "origin": "Atakarejo Paralela",
+      "destination": "Shopping Bela vista"
+    }
+    
+  '''
+}

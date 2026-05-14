@@ -4,14 +4,11 @@ import {
   Get,
   Param,
   Patch,
-  Post,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IdDto } from '@app/common/shared/dto/idDto.dto';
-import { RegisterDto } from '@app/common/modules/auth/dto/register.dto';
-import { LoginDto } from '@app/common/modules/auth/dto/login.dto';
 import { GatewayAuthGuard } from '../../shared/guards/gateway.auth.guard';
 
 import {

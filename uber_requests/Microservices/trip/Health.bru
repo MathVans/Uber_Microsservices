@@ -1,0 +1,21 @@
+meta {
+  name: Health
+  type: grpc
+  seq: 2
+}
+
+grpc {
+  url: {{trip_gRPC}}
+  method: /trips.Trips/health
+  body: grpc
+  protoPath: ../libs/common/src/proto/trip.proto
+  auth: none
+  methodType: unary
+}
+
+body:grpc {
+  name: message 1
+  content: '''
+    {}
+  '''
+}

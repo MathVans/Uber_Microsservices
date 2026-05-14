@@ -33,13 +33,13 @@ export interface JwtTokenResponse {
 
 export const AUTHENTICATION_PACKAGE_NAME = "authentication";
 
-export interface AuthenticationServiceClient {
+export interface AuthenticationClient {
   register(request: RegisterRequest, metadata?: Metadata): Observable<JwtTokenResponse>;
 
   login(request: LoginRequest, metadata?: Metadata): Observable<JwtTokenResponse>;
 }
 
-export interface AuthenticationServiceController {
+export interface AuthenticationController {
   register(
     request: RegisterRequest,
     metadata?: Metadata,
@@ -51,19 +51,19 @@ export interface AuthenticationServiceController {
   ): Promise<JwtTokenResponse> | Observable<JwtTokenResponse> | JwtTokenResponse;
 }
 
-export function AuthenticationServiceControllerMethods() {
+export function AuthenticationControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = ["register", "login"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcMethod("AuthenticationService", method)(constructor.prototype[method], method, descriptor);
+      GrpcMethod("Authentication", method)(constructor.prototype[method], method, descriptor);
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcStreamMethod("AuthenticationService", method)(constructor.prototype[method], method, descriptor);
+      GrpcStreamMethod("Authentication", method)(constructor.prototype[method], method, descriptor);
     }
   };
 }
 
-export const AUTHENTICATION_SERVICE_NAME = "AuthenticationService";
+export const AUTHENTICATION_SERVICE_NAME = "Authentication";

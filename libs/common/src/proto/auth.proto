@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package authentication; 
 
-service AuthenticationService {
+service Authentication {
   rpc Register (RegisterRequest) returns (JwtTokenResponse){}
   rpc Login (LoginRequest) returns (JwtTokenResponse){}
 }

@@ -1,17 +1,17 @@
 import { Controller, UseFilters } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { GrpcMethod, MessagePattern, Payload } from '@nestjs/microservices';
-import { RegisterDto } from '@app/common/modules/auth/dto/register.dto';
-import { LoginDto } from '@app/common/modules/auth/dto/login.dto';
 import { JwtToken } from '@app/common/shared/interfaces/jwt-token.interface';
-import type {
-  AuthenticationServiceController,
-  LoginRequest,
-  RegisterRequest,
+import { AuthenticationControllerMethods } from '../../../../../libs/common/src/proto/auth';
+import {
+  AuthenticationController,
+  type LoginRequest,
+  type RegisterRequest,
 } from '@app/common/proto/auth';
 
 @Controller()
-export class AuthController implements AuthenticationServiceController {
+@AuthenticationControllerMethods()
+export class AuthController implements AuthenticationController {
   constructor(private readonly authService: AuthService) {}
   @GrpcMethod('AuthenticationService', 'register')
   async register(registerDto: RegisterRequest): Promise<JwtToken> {

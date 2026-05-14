@@ -4,14 +4,14 @@ import { UsersService } from './users.service';
 import {
   type FindOneRequest,
   type UpdateRequest,
-  IdentityServiceController,
-  IdentityServiceControllerMethods,
+  IdentityController,
+  IdentityControllerMethods,
   UserResponse,
 } from '@app/common/proto/users';
 
 @Controller()
-@IdentityServiceControllerMethods()
-export class UsersController implements IdentityServiceController {
+@IdentityControllerMethods()
+export class UsersController implements IdentityController {
   constructor(private readonly usersService: UsersService) {}
 
   @GrpcMethod('UsersService', 'FindOne')

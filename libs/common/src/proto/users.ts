@@ -32,13 +32,13 @@ export interface UserResponse {
 
 export const IDENTITY_PACKAGE_NAME = "identity";
 
-export interface IdentityServiceClient {
+export interface IdentityClient {
   findOne(request: FindOneRequest, metadata?: Metadata): Observable<UserResponse>;
 
   update(request: UpdateRequest, metadata?: Metadata): Observable<UserResponse>;
 }
 
-export interface IdentityServiceController {
+export interface IdentityController {
   findOne(
     request: FindOneRequest,
     metadata?: Metadata,
@@ -47,19 +47,19 @@ export interface IdentityServiceController {
   update(request: UpdateRequest, metadata?: Metadata): Promise<UserResponse> | Observable<UserResponse> | UserResponse;
 }
 
-export function IdentityServiceControllerMethods() {
+export function IdentityControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = ["findOne", "update"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcMethod("IdentityService", method)(constructor.prototype[method], method, descriptor);
+      GrpcMethod("Identity", method)(constructor.prototype[method], method, descriptor);
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcStreamMethod("IdentityService", method)(constructor.prototype[method], method, descriptor);
+      GrpcStreamMethod("Identity", method)(constructor.prototype[method], method, descriptor);
     }
   };
 }
 
-export const IDENTITY_SERVICE_NAME = "IdentityService";
+export const IDENTITY_SERVICE_NAME = "Identity";

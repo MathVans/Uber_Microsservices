@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package identity; 
 
-service IdentityService {
+service Identity {
   rpc FindOne (FindOneRequest) returns (UserResponse){};
   rpc Update (UpdateRequest) returns (UserResponse){};
 }

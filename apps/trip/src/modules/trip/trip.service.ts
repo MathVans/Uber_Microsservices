@@ -1,19 +1,23 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { CreateTripDto } from '@app/common/modules/trip/dto/create-trip.dto';
 import { Trip } from './entities/trip.entity';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { EstimateTripDto } from '@app/common/modules/trip/dto/estimate-trip.dto';
-import { EstimateTripResponse } from '@app/common/modules/trip/dto/estimate-trip.reponse';
 import { HttpService } from '@nestjs/axios';
 import { isAxiosError } from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import { TripStatus } from '@app/common/shared/enum/trip-status.enum';
-import { TripResponse } from '@app/common/modules/trip/dto/trip.response';
 import { TripStatusResponse } from '@app/common/modules/trip/dto/trip-status.response';
 import { randomUUID } from 'crypto';
+import { Any } from 'google/protobuf/any';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import {
+  type CreateTripRequest,
+  type TripResponse,
+  type EstimateRequest,
+  type EstimateResponse,
+} from '@app/common/proto/trip';
+import { toProtoTimestamp } from '@app/common/shared/helpers/proto.helpers';
 
 @Injectable()
 export class TripService {
@@ -52,14 +56,16 @@ export class TripService {
     });
   }
 
-  async checkhealth() {
-    const result = this.dispatchClient.emit('check.health', 'Is this healthy?');
-    return result;
+  async checkhealth(): Promise<Any> {
+    this.dispatchClient.emit('check.health', 'Is this healthy?').subscribe();
+
+    return {
+      typeUrl: 'health',
+      value: new Uint8Array(),
+    };
   }
 
-  async estimate(
-    estimateTripDto: EstimateTripDto,
-  ): Promise<EstimateTripResponse> {
+  async estimate(estimateTripDto: EstimateRequest): Promise<EstimateResponse> {
     try {
       const response = await firstValueFrom(
         this.httpService.post(
@@ -89,8 +95,8 @@ export class TripService {
         currency: 'BRL',
         distance: route.legs[0].distance.text,
         duration: route.legs[0].duration.text,
-        start_address: startAddress,
-        end_address: endAddress,
+        startAddress: startAddress,
+        endAddress: endAddress,
       };
     } catch (error) {
       if (error instanceof RpcException) throw error;
@@ -110,7 +116,7 @@ export class TripService {
     }
   }
 
-  async create(createTripDto: CreateTripDto): Promise<TripResponse> {
+  async create(createTripDto: CreateTripRequest): Promise<TripResponse> {
     const estimatedPrice = this.calculatePrice(
       createTripDto.distanceInMeters,
       createTripDto.durationInSeconds,
@@ -127,6 +133,36 @@ export class TripService {
     this.emitEvent('trip.requested', savedTrip);
 
     return savedTrip;
+  }
+
+  async findOne(tripId: string): Promise<TripResponse> {
+    return this.findTripOrThrow(tripId);
+  }
+
+  async findTripsByUserId(id: string): Promise<TripResponse[]> {
+    try {
+      return await this.tripRepository.find({
+        where: [{ passengerId: id }, { driverId: id }],
+      });
+    } catch (error) {
+      throw new RpcException({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Não foi possivel encontrar corrida.',
+      });
+    }
+  }
+
+  private async findTripOrThrow(tripId: string): Promise<Trip> {
+    const trip = await this.tripRepository.findOneBy({ id: tripId });
+
+    if (!trip) {
+      throw new RpcException({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Viagem não encontrada.',
+      });
+    }
+
+    return trip;
   }
 
   async cancel(tripId: string): Promise<TripStatusResponse> {
@@ -226,36 +262,6 @@ export class TripService {
       message: 'Corrida finalizada com sucesso.',
       date: date.toISOString(),
     };
-  }
-
-  async findOne(tripId: string): Promise<TripResponse> {
-    return this.findTripOrThrow(tripId);
-  }
-
-  async findUserId(id: string): Promise<TripResponse[]> {
-    try {
-      return await this.tripRepository.find({
-        where: [{ passengerId: id }, { driverId: id }],
-      });
-    } catch (error) {
-      throw new RpcException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Não foi possivel encontrar corrida.',
-      });
-    }
-  }
-
-  private async findTripOrThrow(tripId: string): Promise<Trip> {
-    const trip = await this.tripRepository.findOneBy({ id: tripId });
-
-    if (!trip) {
-      throw new RpcException({
-        statusCode: HttpStatus.NOT_FOUND,
-        message: 'Viagem não encontrada.',
-      });
-    }
-
-    return trip;
   }
 
   private calculatePrice(

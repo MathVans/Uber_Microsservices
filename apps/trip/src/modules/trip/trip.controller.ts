@@ -1,57 +1,82 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { GrpcMethod } from '@nestjs/microservices';
 import { TripService } from './trip.service';
-
-import { TRIP_PATTERNS } from '@app/common/modules/trip/trip.patterns';
-import { EstimateTripDto } from '@app/common/modules/trip/dto/estimate-trip.dto';
-import { CreateTripDto } from '@app/common/modules/trip/dto/create-trip.dto';
+import {
+  type CreateTripRequest,
+  type EstimateRequest,
+  type EstimateResponse,
+  type TripResponse,
+  TripsController,
+  TripsControllerMethods,
+} from '@app/common/proto/trip';
+import { Metadata } from '@grpc/grpc-js';
+import { Any } from 'google/protobuf/any';
+import type { Empty } from 'google/protobuf/empty';
+import { Observable } from 'rxjs';
 
 @Controller()
-export class TripController {
+@TripsControllerMethods()
+export class TripController implements TripsController {
   constructor(private readonly tripService: TripService) {}
 
-  @MessagePattern(TRIP_PATTERNS.ESTIMATE)
-  estimate(@Payload() estimateTripDto: EstimateTripDto) {
-    return this.tripService.estimate(estimateTripDto);
-  }
-
-  @MessagePattern(TRIP_PATTERNS.CREATE)
-  create(@Payload() createTripDto: CreateTripDto) {
-    return this.tripService.create(createTripDto);
-  }
-
-  @MessagePattern(TRIP_PATTERNS.FIND_ONE)
-  findOne(@Payload() id: string) {
-    return this.tripService.findOne(id);
-  }
-
-  @MessagePattern(TRIP_PATTERNS.FIND_BY_USER)
-  findByUser(@Payload() id: string) {
-    return this.tripService.findUserId(id);
-  }
-
-  @MessagePattern(TRIP_PATTERNS.CANCEL)
-  cancel(@Payload() id: string) {
-    return this.tripService.cancel(id);
-  }
-
-  @MessagePattern(TRIP_PATTERNS.ACCEPT)
-  accept(@Payload() id: string) {
-    return this.tripService.accept(id);
-  }
-
-  @MessagePattern(TRIP_PATTERNS.START)
-  start(@Payload() id: string) {
-    return this.tripService.start(id);
-  }
-
-  @MessagePattern(TRIP_PATTERNS.FINISH)
-  finish(@Payload() id: string) {
-    return this.tripService.finish(id);
-  }
-
-  @MessagePattern(TRIP_PATTERNS.HEALTH)
-  health() {
+  @GrpcMethod('Trips', 'health')
+  health(
+    request: Empty,
+    metadata?: Metadata,
+  ): Promise<Any> | Observable<Any> | Any {
     return this.tripService.checkhealth();
   }
+
+  @GrpcMethod('Trips', 'estimate')
+  estimate(
+    request: EstimateRequest,
+    metadata?: Metadata,
+  ):
+    | Promise<EstimateResponse>
+    | Observable<EstimateResponse>
+    | EstimateResponse {
+    return this.tripService.estimate(request);
+  }
+
+  @GrpcMethod('Trips', 'create')
+  create(
+    request: CreateTripRequest,
+    metadata?: Metadata,
+  ): Promise<TripResponse> | Observable<TripResponse> | TripResponse {
+    return this.tripService.create(request);
+  }
+
+  // @MessagePattern(TRIP_PATTERNS.CREATE)
+  // Create(@Payload() createTripDto: CreateTripDto) {
+  // }
+
+  // @MessagePattern(TRIP_PATTERNS.FIND_ONE)
+  // findOne(@Payload() id: string) {
+  //   return this.tripService.findOne(id);
+  // }
+
+  // @MessagePattern(TRIP_PATTERNS.FIND_BY_USER)
+  // findByUser(@Payload() id: string) {
+  //   return this.tripService.findUserId(id);
+  // }
+
+  // @MessagePattern(TRIP_PATTERNS.CANCEL)
+  // cancel(@Payload() id: string) {
+  //   return this.tripService.cancel(id);
+  // }
+
+  // @MessagePattern(TRIP_PATTERNS.ACCEPT)
+  // accept(@Payload() id: string) {
+  //   return this.tripService.accept(id);
+  // }
+
+  // @MessagePattern(TRIP_PATTERNS.START)
+  // start(@Payload() id: string) {
+  //   return this.tripService.start(id);
+  // }
+
+  // @MessagePattern(TRIP_PATTERNS.FINISH)
+  // finish(@Payload() id: string) {
+  //   return this.tripService.finish(id);
+  // }
 }

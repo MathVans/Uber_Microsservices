@@ -10,48 +10,48 @@ import { GatewayAuthGuard } from '../../shared/guards/gateway.auth.guard';
 export class TripController {
   constructor(private readonly tripService: TripService) {}
 
-  @Post('/estimate')
-  estimate(@Body() estimateTripDto: EstimateTripDto) {
-    return this.tripService.estimate(estimateTripDto);
-  }
-
-  @Post()
-  create(@Body() createTripDto: CreateTripDto) {
-    return this.tripService.create(createTripDto);
-  }
-
-  @Get()
-  findByUser(@Body() idDto: IdDto) {
-    return this.tripService.findByUser(idDto.id);
-  }
-
   @Get('/health')
   checkHealth() {
     return this.tripService.checkHealth();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tripService.findOne(id);
-  }
+  // @Post('/estimate')
+  // estimate(@Body() estimateTripDto: EstimateTripDto) {
+  //   return this.tripService.estimate(estimateTripDto);
+  // }
 
-  @Post('/:id/cancel')
-  cancel(@Param('id') id: string) {
-    return this.tripService.cancel(id);
-  }
+  // @Post()
+  // create(@Body() createTripDto: CreateTripDto) {
+  //   return this.tripService.create(createTripDto);
+  // }
 
-  @Post('/:id/accept')
-  accept(@Param('id') id: string) {
-    return this.tripService.accept(id);
-  }
+  // @Get()
+  // findByUser(@Body() idDto: IdDto) {
+  //   return this.tripService.findByUser(idDto.id);
+  // }
 
-  @Post('/:id/start')
-  start(@Param('id') id: string) {
-    return this.tripService.start(id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.tripService.findOne(id);
+  // }
 
-  @Post('/:id/finish')
-  finish(@Param('id') id: string) {
-    return this.tripService.finish(id);
-  }
+  // @Post('/:id/cancel')
+  // cancel(@Param('id') id: string) {
+  //   return this.tripService.cancel(id);
+  // }
+
+  // @Post('/:id/accept')
+  // accept(@Param('id') id: string) {
+  //   return this.tripService.accept(id);
+  // }
+
+  // @Post('/:id/start')
+  // start(@Param('id') id: string) {
+  //   return this.tripService.start(id);
+  // }
+
+  // @Post('/:id/finish')
+  // finish(@Param('id') id: string) {
+  //   return this.tripService.finish(id);
+  // }
 }
