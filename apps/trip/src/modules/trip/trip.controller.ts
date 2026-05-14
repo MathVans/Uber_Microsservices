@@ -5,6 +5,8 @@ import {
   type CreateTripRequest,
   type EstimateRequest,
   type EstimateResponse,
+  IdRequest,
+  TripListResponse,
   type TripResponse,
   TripsController,
   TripsControllerMethods,
@@ -46,15 +48,21 @@ export class TripController implements TripsController {
     return this.tripService.create(request);
   }
 
-  // @MessagePattern(TRIP_PATTERNS.CREATE)
-  // Create(@Payload() createTripDto: CreateTripDto) {
-  // }
-
-  // @MessagePattern(TRIP_PATTERNS.FIND_ONE)
-  // findOne(@Payload() id: string) {
-  //   return this.tripService.findOne(id);
-  // }
-
+  findOne(
+    request: IdRequest,
+    metadata?: Metadata,
+  ): Promise<TripResponse> | Observable<TripResponse> | TripResponse {
+    return this.tripService.findOne(request.id);
+  }
+  findByUser(
+    request: IdRequest,
+    metadata?: Metadata,
+  ):
+    | Promise<TripListResponse>
+    | Observable<TripListResponse>
+    | TripListResponse {
+    throw new Error('Method not implemented.');
+  }
   // @MessagePattern(TRIP_PATTERNS.FIND_BY_USER)
   // findByUser(@Payload() id: string) {
   //   return this.tripService.findUserId(id);

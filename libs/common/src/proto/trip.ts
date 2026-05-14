@@ -45,6 +45,14 @@ export interface TripResponse {
   createdAt: Date | undefined;
 }
 
+export interface TripListResponse {
+  trips: TripResponse[];
+}
+
+export interface IdRequest {
+  id: string;
+}
+
 export const TRIPS_PACKAGE_NAME = "trips";
 
 wrappers[".google.protobuf.Timestamp"] = {
@@ -62,6 +70,10 @@ export interface TripsClient {
   estimate(request: EstimateRequest, metadata?: Metadata): Observable<EstimateResponse>;
 
   create(request: CreateTripRequest, metadata?: Metadata): Observable<TripResponse>;
+
+  findOne(request: IdRequest, metadata?: Metadata): Observable<TripResponse>;
+
+  findByUser(request: IdRequest, metadata?: Metadata): Observable<TripListResponse>;
 }
 
 export interface TripsController {
@@ -76,11 +88,18 @@ export interface TripsController {
     request: CreateTripRequest,
     metadata?: Metadata,
   ): Promise<TripResponse> | Observable<TripResponse> | TripResponse;
+
+  findOne(request: IdRequest, metadata?: Metadata): Promise<TripResponse> | Observable<TripResponse> | TripResponse;
+
+  findByUser(
+    request: IdRequest,
+    metadata?: Metadata,
+  ): Promise<TripListResponse> | Observable<TripListResponse> | TripListResponse;
 }
 
 export function TripsControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["health", "estimate", "create"];
+    const grpcMethods: string[] = ["health", "estimate", "create", "findOne", "findByUser"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("Trips", method)(constructor.prototype[method], method, descriptor);

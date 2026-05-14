@@ -5,7 +5,6 @@ import * as microservices from '@nestjs/microservices';
 import { TRIP_PATTERNS } from '@app/common/modules/trip/trip.patterns';
 import { lastValueFrom } from 'rxjs';
 import { TripResponse } from '@app/common/modules/trip/dto/trip.response';
-import { TripStatusResponse } from '@app/common/modules/trip/dto/trip-status.response';
 import {
   TRIPS_PACKAGE_NAME,
   TRIPS_SERVICE_NAME,
@@ -28,26 +27,22 @@ export class TripService implements OnModuleInit {
     return this.grpcTripService.health({});
   }
 
-  // async estimate(estimateTripDto: EstimateTripDto): Promise<any> {
-  //   const result = this.tripClient.send(
-  //     TRIP_PATTERNS.ESTIMATE,
-  //     estimateTripDto,
-  //   );
+  async estimate(estimateTripDto: EstimateTripDto): Promise<any> {
+    const result = this.grpcTripService.estimate(estimateTripDto);
 
-  //   return await lastValueFrom(result);
-  // }
+    return await lastValueFrom(result);
+  }
 
-  // async create(createTripDto: CreateTripDto): Promise<TripResponse> {
-  //   const result = this.tripClient.send(TRIP_PATTERNS.CREATE, createTripDto);
+  async create(createTripDto: CreateTripDto): Promise<TripResponse> {
+    const result = this.grpcTripService.create(createTripDto);
 
-  //   return await lastValueFrom(result);
-  // }
+    return await lastValueFrom(result);
+  }
 
-  // async findOne(id: string): Promise<TripResponse> {
-  //   const result = this.tripClient.send(TRIP_PATTERNS.FIND_ONE, id);
-
-  //   return await lastValueFrom(result);
-  // }
+  async findOne(id: string): Promise<TripResponse> {
+    const result = this.grpcTripService.findOne({ id });
+    return await lastValueFrom(result);
+  }
 
   // async findByUser(id: string): Promise<TripResponse[]> {
   //   const result = this.tripClient.send(TRIP_PATTERNS.FIND_BY_USER, id);

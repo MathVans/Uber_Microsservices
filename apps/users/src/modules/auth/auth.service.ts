@@ -22,7 +22,7 @@ export class AuthService {
 
     if (existingUser) {
       throw new RpcException({
-        statusCode: HttpStatus.CONFLICT,
+        code: HttpStatus.CONFLICT,
         message: "User Already Exist's",
       });
     }
@@ -62,7 +62,7 @@ export class AuthService {
 
     if (!user || !user.password) {
       throw new RpcException({
-        statusCode: HttpStatus.UNAUTHORIZED,
+        code: HttpStatus.UNAUTHORIZED,
         message: 'Credenciais inválidas',
       });
     }
@@ -74,7 +74,7 @@ export class AuthService {
 
     if (!isPasswordMatching) {
       throw new RpcException({
-        statusCode: HttpStatus.UNAUTHORIZED,
+        code: HttpStatus.UNAUTHORIZED,
         message: 'Credenciais inválidas',
       });
     }

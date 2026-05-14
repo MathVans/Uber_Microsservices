@@ -10,7 +10,11 @@ service Trips {
   rpc health (google.protobuf.Empty) returns (google.protobuf.Any){};
   rpc estimate (EstimateRequest) returns (EstimateResponse){};
   rpc create (CreateTripRequest) returns (TripResponse){};
+  rpc findOne (IdRequest) returns (TripResponse){};
+  rpc findByUser (IdRequest) returns (TripListResponse){};
 }
+
+
 
 message EstimateRequest {
   string origin = 1;
@@ -41,4 +45,12 @@ message TripResponse {
   string status = 4;
   optional float finalPrice = 5;
   google.protobuf.Timestamp createdAt = 6;
+}
+
+message TripListResponse {
+  repeated TripResponse trips = 1;
+}
+
+message IdRequest {
+  string id=1;
 }

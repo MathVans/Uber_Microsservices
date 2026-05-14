@@ -15,25 +15,25 @@ export class TripController {
     return this.tripService.checkHealth();
   }
 
-  // @Post('/estimate')
-  // estimate(@Body() estimateTripDto: EstimateTripDto) {
-  //   return this.tripService.estimate(estimateTripDto);
-  // }
+  @Post('/estimate')
+  estimate(@Body() estimateTripDto: EstimateTripDto) {
+    return this.tripService.estimate(estimateTripDto);
+  }
 
-  // @Post()
-  // create(@Body() createTripDto: CreateTripDto) {
-  //   return this.tripService.create(createTripDto);
-  // }
+  @Post()
+  create(@Body() createTripDto: CreateTripDto) {
+    return this.tripService.create(createTripDto);
+  }
 
   // @Get()
   // findByUser(@Body() idDto: IdDto) {
   //   return this.tripService.findByUser(idDto.id);
   // }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.tripService.findOne(id);
-  // }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.tripService.findOne(id);
+  }
 
   // @Post('/:id/cancel')
   // cancel(@Param('id') id: string) {

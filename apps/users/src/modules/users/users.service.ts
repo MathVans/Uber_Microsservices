@@ -18,7 +18,7 @@ export class UsersService {
 
     if (!user) {
       throw new RpcException({
-        statusCode: HttpStatus.NOT_FOUND,
+        code: HttpStatus.NOT_FOUND,
         message: 'Usuário não encontrado',
       });
     }
@@ -32,7 +32,7 @@ export class UsersService {
 
     if (!updatedUser) {
       throw new RpcException({
-        statusCode: HttpStatus.NOT_FOUND,
+        code: HttpStatus.NOT_FOUND,
         message: 'Usuário não encontrado',
       });
     }

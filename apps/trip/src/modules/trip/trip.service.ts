@@ -18,6 +18,7 @@ import {
   type EstimateResponse,
 } from '@app/common/proto/trip';
 import { toProtoTimestamp } from '@app/common/shared/helpers/proto.helpers';
+import { Code } from 'typeorm/browser';
 
 @Injectable()
 export class TripService {
@@ -77,7 +78,7 @@ export class TripService {
 
       if (!response.data?.routes?.length) {
         throw new RpcException({
-          statusCode: HttpStatus.NOT_FOUND,
+          code: HttpStatus.NOT_FOUND,
           message: 'Nao foi possivel encontrar rota.',
         });
       }
@@ -103,14 +104,14 @@ export class TripService {
 
       if (isAxiosError(error)) {
         throw new RpcException({
-          statusCode: HttpStatus.BAD_GATEWAY,
+          code: HttpStatus.BAD_GATEWAY,
           message: 'Falha ao consultar Google Maps.',
           details: error.response?.data ?? error.message,
         });
       }
 
       throw new RpcException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        code: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'Erro interno ao estimar corrida.',
       });
     }
@@ -146,7 +147,7 @@ export class TripService {
       });
     } catch (error) {
       throw new RpcException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        code: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'Não foi possivel encontrar corrida.',
       });
     }
@@ -157,7 +158,7 @@ export class TripService {
 
     if (!trip) {
       throw new RpcException({
-        statusCode: HttpStatus.NOT_FOUND,
+        code: HttpStatus.NOT_FOUND,
         message: 'Viagem não encontrada.',
       });
     }
@@ -176,13 +177,13 @@ export class TripService {
     this.emitEvent('trip.canceled', {
       tripId: trip.id,
       passengerId: trip.passengerId,
-      driverId: trip.driverId, // pode ser null se cancelou antes de aceitar
+      driverId: trip.driverId,
       status: TripStatus.CANCELED,
       canceledAt: date.toISOString(),
     });
 
     return {
-      statusCode: HttpStatus.OK,
+      code: HttpStatus.OK,
       message: 'Corrida cancelada com sucesso.',
       date: date.toISOString(),
     };
@@ -207,7 +208,7 @@ export class TripService {
     });
 
     return {
-      statusCode: HttpStatus.OK,
+      code: HttpStatus.OK,
       message: 'Corrida aceita com sucesso.',
       date: date.toISOString(),
     };
@@ -230,7 +231,7 @@ export class TripService {
     });
 
     return {
-      statusCode: HttpStatus.OK,
+      code: HttpStatus.OK,
       message: 'Corrida iniciada.',
       date: date.toISOString(),
     };
@@ -258,7 +259,7 @@ export class TripService {
     });
 
     return {
-      statusCode: HttpStatus.OK,
+      code: HttpStatus.OK,
       message: 'Corrida finalizada com sucesso.',
       date: date.toISOString(),
     };

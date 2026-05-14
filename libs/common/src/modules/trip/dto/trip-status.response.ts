@@ -1,5 +1,5 @@
 export class TripStatusResponse {
-  statusCode: number;
+  code: number;
   message: string;
   date: string;
 }
