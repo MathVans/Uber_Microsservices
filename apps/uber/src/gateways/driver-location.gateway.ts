@@ -1,18 +1,52 @@
 import {
   MessageBody,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
+  WebSocketServer,
 } from '@nestjs/websockets';
-import { ClientGrpc, ClientProxy } from '@nestjs/microservices';
-import { Inject } from '@nestjs/common';
+import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway({ namespace: '/drivers' })
-export class DriverLocationGateway {
-  constructor(
-    @Inject('DISPATCH_API_SERVICE') private dispatchApiClient: ClientProxy,
-  ) {}
-  @SubscribeMessage('update_location')
-  handleLocationUpdate(
+@WebSocketGateway({
+  namespace: '/drivers',
+  cors: {
+    origin: '*',
+  },
+})
+export class DriverLocationGateway
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
+  @WebSocketServer() server: Server;
+
+  @SubscribeMessage('update_driver_location')
+  handleDriverLocationUpdate(
     @MessageBody() data: { driverId: string; lat: number; lng: number },
-  ) {}
+  ) {
+    console.log(
+      '🚀 ~ DriverLocationGateway ~ handleDriverLocationUpdate ~ data:',
+      data,
+    );
+    this.server.emit('reply', data);
+  }
+
+  @SubscribeMessage('update_passenger_location')
+  handlePassengerLocationUpdate(
+    @MessageBody() data: { passenger: string; lat: number; lng: number },
+  ) {
+    this.server.emit('reply', data);
+  }
+
+  handleConnection(client: Socket, ...args: any[]) {
+    console.log(
+      '🚀 ~ DriverLocationGateway ~ handleConnection ~ client:',
+      client.id,
+    );
+  }
+  handleDisconnect(client: Socket) {
+    console.log(
+      '🚀 ~ DriverLocationGateway ~ handleDisconnect ~ client:',
+      client.id,
+    );
+  }
 }

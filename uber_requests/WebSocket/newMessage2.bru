@@ -1,0 +1,22 @@
+meta {
+  name: newMessage2
+  type: ws
+  seq: 2
+}
+
+ws {
+  url: http://localhost:3009
+  body: ws
+  auth: none
+}
+
+body:ws {
+  name: message 1
+  type: json
+  content: '''
+    {
+      "event": "newMessageV2",
+      "data": { "texto": "Olá mundo" }
+    }
+  '''
+}
