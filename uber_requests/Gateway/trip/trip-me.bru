@@ -1,11 +1,11 @@
 meta {
-  name: trip/_1
+  name: trip/me
   type: http
   seq: 4
 }
 
 get {
-  url: {{link}}{{prefix}}/trip
+  url: {{link}}{{prefix}}/trip/me
   body: json
   auth: none
 }
@@ -13,13 +13,7 @@ get {
 headers {
   Content-Type: application/json
   User-Agent: insomnia/11.6.2
-  Authorization: {{token}}
-}
-
-body:json {
-  {
-    "id": "259ce817-5259-49ae-8ced-5465c4cdfe76"
-  }
+  Authorization: Bearer {{token}}
 }
 
 settings {

@@ -23,6 +23,7 @@ export class GatewayAuthGuard implements CanActivate {
       const payload = this.jwtService.verify(token, {
         secret: process.env.JWT_SECRET || 'Secret',
       });
+
       request.headers['X_User_Id'] = payload.id;
       request.headers['X_User_Role'] = payload.role;
       request.headers['X_User_Email'] = payload.email;

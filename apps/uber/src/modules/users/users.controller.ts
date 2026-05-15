@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IdDto } from '@app/common/shared/dto/idDto.dto';
@@ -19,13 +27,15 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('/me')
-  findOne(@Body() idDto: IdDto) {
-    return this.usersService.findOne(idDto.id);
+  findOne(@Req() req) {
+    const userId = req.headers['X_User_Id'];
+    return this.usersService.findOne(userId);
   }
 
   @Patch('/me')
-  async update(@Body() updateUserDto: UpdateUserDto) {
-    return await this.usersService.update(updateUserDto);
+  async update(@Body() updateUserDto: UpdateUserDto, @Req() req) {
+    const userId = req.headers['X_User_Id'];
+    return await this.usersService.update(userId, updateUserDto);
   }
 
   @Get('/:id')

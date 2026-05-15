@@ -28,8 +28,8 @@ export class UsersService implements OnModuleInit {
     return await lastValueFrom(response);
   }
 
-  async update(data: UpdateUserDto): Promise<any> {
-    const response = this.grpcIdentityService.update(data);
+  async update(id: string, data: UpdateUserDto): Promise<any> {
+    const response = this.grpcIdentityService.update({ id, ...data });
 
     return await lastValueFrom(response);
   }

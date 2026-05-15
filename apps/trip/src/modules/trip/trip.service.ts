@@ -16,6 +16,7 @@ import {
   type TripResponse,
   type EstimateRequest,
   type EstimateResponse,
+  TripListResponse,
 } from '@app/common/proto/trip';
 import { toProtoTimestamp } from '@app/common/shared/helpers/proto.helpers';
 import { Code } from 'typeorm/browser';
@@ -140,11 +141,13 @@ export class TripService {
     return this.findTripOrThrow(tripId);
   }
 
-  async findTripsByUserId(id: string): Promise<TripResponse[]> {
+  async findTripsByUserId(id: string): Promise<TripListResponse> {
     try {
-      return await this.tripRepository.find({
+      const trips = await this.tripRepository.find({
         where: [{ passengerId: id }, { driverId: id }],
       });
+
+      return { trips };
     } catch (error) {
       throw new RpcException({
         code: HttpStatus.INTERNAL_SERVER_ERROR,

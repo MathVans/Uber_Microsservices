@@ -1,8 +1,15 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { TripService } from './trip.service';
 import { CreateTripDto } from '@app/common/modules/trip/dto/create-trip.dto';
 import { EstimateTripDto } from '@app/common/modules/trip/dto/estimate-trip.dto';
-import { IdDto } from '@app/common/shared/dto/idDto.dto';
 import { GatewayAuthGuard } from '../../shared/guards/gateway.auth.guard';
 
 @UseGuards(GatewayAuthGuard)
@@ -20,15 +27,17 @@ export class TripController {
     return this.tripService.estimate(estimateTripDto);
   }
 
+  @Get('/me')
+  findByUser(@Req() req) {
+    const userId = req.headers['X_User_Id'];
+
+    return this.tripService.findByUser(userId);
+  }
+
   @Post()
   create(@Body() createTripDto: CreateTripDto) {
     return this.tripService.create(createTripDto);
   }
-
-  // @Get()
-  // findByUser(@Body() idDto: IdDto) {
-  //   return this.tripService.findByUser(idDto.id);
-  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

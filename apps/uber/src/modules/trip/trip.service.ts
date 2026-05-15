@@ -6,6 +6,7 @@ import { TRIP_PATTERNS } from '@app/common/modules/trip/trip.patterns';
 import { lastValueFrom } from 'rxjs';
 import { TripResponse } from '@app/common/modules/trip/dto/trip.response';
 import {
+  TripListResponse,
   TRIPS_PACKAGE_NAME,
   TRIPS_SERVICE_NAME,
   TripsClient,
@@ -44,10 +45,10 @@ export class TripService implements OnModuleInit {
     return await lastValueFrom(result);
   }
 
-  // async findByUser(id: string): Promise<TripResponse[]> {
-  //   const result = this.tripClient.send(TRIP_PATTERNS.FIND_BY_USER, id);
-  //   return await lastValueFrom(result);
-  // }
+  async findByUser(id: string): Promise<TripListResponse> {
+    const result = this.grpcTripService.findByUser({ id });
+    return await lastValueFrom(result);
+  }
 
   // async cancel(tripId: string): Promise<TripStatusResponse> {
   //   const result = this.tripClient.send(TRIP_PATTERNS.CANCEL, tripId);

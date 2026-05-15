@@ -61,11 +61,12 @@ export class TripController implements TripsController {
     | Promise<TripListResponse>
     | Observable<TripListResponse>
     | TripListResponse {
-    throw new Error('Method not implemented.');
+    return this.tripService.findTripsByUserId(request.id);
   }
-  // @MessagePattern(TRIP_PATTERNS.FIND_BY_USER)
-  // findByUser(@Payload() id: string) {
-  //   return this.tripService.findUserId(id);
+
+  // @MessagePattern(TRIP_PATTERNS.ACCEPT)
+  // accept(@Payload() id: string) {
+  //   return this.tripService.accept(id);
   // }
 
   // @MessagePattern(TRIP_PATTERNS.CANCEL)
@@ -73,10 +74,6 @@ export class TripController implements TripsController {
   //   return this.tripService.cancel(id);
   // }
 
-  // @MessagePattern(TRIP_PATTERNS.ACCEPT)
-  // accept(@Payload() id: string) {
-  //   return this.tripService.accept(id);
-  // }
 
   // @MessagePattern(TRIP_PATTERNS.START)
   // start(@Payload() id: string) {
