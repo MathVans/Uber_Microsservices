@@ -1,0 +1,18 @@
+syntax = "proto3"; 
+
+package dispatch; 
+
+service Dispatch {
+  rpc LocationUpdate (stream LocalizationRequest) returns (stream LocalizationResponse){}
+}
+
+message LocalizationRequest {
+  string id = 1;
+  int32 latitude = 2;
+  int32 longitude = 3;
+}
+
+message LocalizationResponse {
+  string tripCall = 1;
+}
+

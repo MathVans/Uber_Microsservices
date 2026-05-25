@@ -1,8 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import { MatchingService } from './matching.service';
-import { CreateMatchingDto } from './dto/create-matching.dto';
-import { UpdateMatchingDto } from './dto/update-matching.dto';
 
 @Controller()
 export class MatchingController {
@@ -16,9 +14,9 @@ export class MatchingController {
     );
 
     // Aqui você implementa a lógica de matching:
-    // 1. Buscar motoristas próximos
-    // 2. Enviar notificação aos motoristas
-    // 3. Aguardar aceitação
-    // 4. Confirma corrida
+    // // 1. Buscar motoristas próximos
+    // // 2. Enviar notificação aos motoristas
+    // // 3. Aguardar aceitação
+    // // 4. Confirma corrida
   }
 }

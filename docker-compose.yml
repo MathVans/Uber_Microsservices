@@ -51,6 +51,16 @@ services:
       DYNAMIC_CONFIG_ENABLED: 'true'
     networks:
       - uber-network
+  redis:
+    image: redis:latest
+    container_name: redis_client
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --requirepass your_secure_password
+    volumes:
+      - redis_data:/data
 
 volumes:
   postgres-data:
+  redis_data:

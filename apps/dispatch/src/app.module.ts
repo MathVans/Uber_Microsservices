@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
-import { MatchingController } from './modules/matching/matching.controller';
-import { MatchingService } from './modules/matching/matching.service';
 import { MatchingModule } from './modules/matching/matching.module';
 import { ConfigModule } from '@nestjs/config';
+import { RedisInfraModule } from './infrastructure/redis/redis.module';
 
 @Module({
   imports: [
@@ -10,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true,
       envFilePath: 'apps/dispatch/.env',
     }),
+    RedisInfraModule,
     MatchingModule,
   ],
 })
