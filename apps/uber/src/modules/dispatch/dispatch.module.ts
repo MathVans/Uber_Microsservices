@@ -16,9 +16,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
             config.get<string>('KAFKA_BROKERS') ??
             config.get<string>('KAFKA_BROKER_URL') ??
             'localhost:9092';
-
           const brokers = brokersStr.split(',').map((b) => b.trim());
-
           return {
             transport: Transport.KAFKA,
             options: {
@@ -33,17 +31,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
                 allowAutoTopicCreation: true,
               },
             },
-          };
-        },
-      },
-      {
-        name: 'DISPATCH_API_SERVICE',
-        imports: [ConfigModule],
-        inject: [ConfigService],
-        useFactory: (config: ConfigService) => {
-          return {
-            transport: Transport.TCP,
-            options: { port: 3010 },
           };
         },
       },
