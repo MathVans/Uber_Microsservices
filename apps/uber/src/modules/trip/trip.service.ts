@@ -2,7 +2,6 @@ import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { CreateTripDto } from '@app/common/modules/trip/dto/create-trip.dto';
 import { EstimateTripDto } from '@app/common/modules/trip/dto/estimate-trip.dto';
 import * as microservices from '@nestjs/microservices';
-import { TRIP_PATTERNS } from '@app/common/modules/trip/trip.patterns';
 import { lastValueFrom } from 'rxjs';
 import { TripResponse } from '@app/common/modules/trip/dto/trip.response';
 import {

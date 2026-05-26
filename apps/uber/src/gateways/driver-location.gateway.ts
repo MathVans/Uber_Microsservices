@@ -1,3 +1,5 @@
+import { Inject } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import {
   MessageBody,
   OnGatewayConnection,
@@ -6,7 +8,9 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
+import { randomUUID } from 'crypto';
 import { Server, Socket } from 'socket.io';
+import { EmitEvent } from '../modules/dispatch/helpers/event-emitter';
 
 @WebSocketGateway({
   namespace: '/drivers',
@@ -17,16 +21,16 @@ import { Server, Socket } from 'socket.io';
 export class DriverLocationGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
+  constructor(
+    @Inject('DISPATCH_SERVICE') private readonly dispatchClient: ClientProxy,
+  ) {}
   @WebSocketServer() server: Server;
 
   @SubscribeMessage('update_driver_location')
   handleDriverLocationUpdate(
     @MessageBody() data: { driverId: string; lat: number; lng: number },
   ) {
-    console.log(
-      '🚀 ~ DriverLocationGateway ~ handleDriverLocationUpdate ~ data:',
-      data,
-    );
+    EmitEvent(this.dispatchClient, 'driver.location', data);
     this.server.emit('reply', data);
   }
 
@@ -34,6 +38,7 @@ export class DriverLocationGateway
   handlePassengerLocationUpdate(
     @MessageBody() data: { passenger: string; lat: number; lng: number },
   ) {
+    EmitEvent(this.dispatchClient, 'passenger.location', data);
     this.server.emit('reply', data);
   }
 

@@ -19,4 +19,8 @@ export class MatchingController {
     // // 3. Aguardar aceitação
     // // 4. Confirma corrida
   }
+  @EventPattern('driver.location')
+  async handleStoreLocations(@Payload() payload: any) {
+    this.matchingService.storeDriverLocation(payload.data);
+  }
 }

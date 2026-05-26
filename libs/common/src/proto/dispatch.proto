@@ -8,8 +8,8 @@ service Dispatch {
 
 message LocalizationRequest {
   string id = 1;
-  int32 latitude = 2;
-  int32 longitude = 3;
+  int32 lat = 2;
+  int32 lng = 3;
 }
 
 message LocalizationResponse {

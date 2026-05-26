@@ -3,6 +3,7 @@ import { DispatchService } from './dispatch.service';
 import { DispatchController } from './dispatch.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DriverLocationGateway } from '../../gateways/driver-location.gateway';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
             config.get<string>('KAFKA_BROKER_URL') ??
             'localhost:9092';
           const brokers = brokersStr.split(',').map((b) => b.trim());
+
           return {
             transport: Transport.KAFKA,
             options: {
@@ -37,6 +39,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     ]),
   ],
   controllers: [DispatchController],
-  providers: [DispatchService],
+  providers: [DispatchService, DriverLocationGateway],
 })
 export class DispatchModule {}

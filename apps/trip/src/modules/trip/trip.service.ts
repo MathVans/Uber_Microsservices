@@ -18,8 +18,6 @@ import {
   type EstimateResponse,
   TripListResponse,
 } from '@app/common/proto/trip';
-import { toProtoTimestamp } from '@app/common/shared/helpers/proto.helpers';
-import { Code } from 'typeorm/browser';
 
 @Injectable()
 export class TripService {
